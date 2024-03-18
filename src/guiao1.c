@@ -20,11 +20,28 @@ wchar_t highestCard(wchar_t cards[])
     return cardCompare;
 }
 
+int countCards(wchar_t cards[])
+{
+    int count = 0;
+    for (int i = 0; cards[i] != '\0'; i++)
+    {
+        count++;
+    }
+    return count;
+}
+
 
 int main()
 {
-    setlocale(LC_ALL, "");
-    wchar_t cards[100] = {0x1F0B6, 0x1F0C7, 0x1F0D3, 0x1F0AA};
-    printf("A maior carta é: %lc\n", highestCard(cards));
+    int n = 0;
+    if (scanf("%d", &n) == 1);
+    for (int i = 0; i <= n; i++)
+    {
+        setlocale(LC_ALL, "");
+        wchar_t cards[100] = {0x1F0B6, 0x1F0C7, 0x1F0D3, 0x1F0AA};
+        printf("A maior carta é: %lc\n", highestCard(cards));
+    }
+    
+    
 
 }
