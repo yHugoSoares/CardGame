@@ -70,13 +70,11 @@ int main()
 {
     setlocale(LC_ALL, "");
     int l;
-    wchar_t cards[100];
+    wchar_t cards[100] = {0x1F0BA, 0x1F0CA, 0x1F0DA, 0x1F0AA};
     if (scanf("%d\n", &l) != 1) return 0;
     for (int i = 0; i < l; i++)
     {
         if (wscanf(L"%100ls", cards) == 0) return 0;
-
-        wprintf(L"Cartas: %ls\n", cards);
 
         if (conjunto(cards) == 1)
             wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n", countCards(cards), highestCard(cards));
@@ -88,7 +86,7 @@ int main()
             wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n", countCards(cards)/2, highestCard(cards));
 
         else
-            printf("Nada!");
+            printf("Nada!\n");
     }
 
     
