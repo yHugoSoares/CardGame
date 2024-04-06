@@ -89,6 +89,52 @@ int main()
             printf("Nada!\n");
     }
 
+/*
+int main() {
+    setlocale(LC_ALL, "");
+    int linhas;
+    if (wscanf(L"%d", &linhas) != 1) return 1; // Lê o número de linhas que vão ser lidas
+
+    for (int i = 0; i < linhas; ++i) { // Itera para cada linha
+
+        wchar_t cartas[100]; // Assume-se que cada conjunto de cartas tem no máximo 100 elementos
+        if (wscanf(L"%99ls", cartas) == 0) return 1; // Lê um conjunto de cartas
+
+        // if (conjunto(cartas) == 1)
+        if (1) // funcao conjunto e highestcard nao funcionam
+            wprintf(L"conjunto com %ld cartas onde a carta mais alta é %lc\n", wcslen(cartas), highestCard(cartas));
+        // Faltam as condicoes para as outros tipos
+        else
+            wprintf(L"Nada em %ls !", cartas);
+    }
+
+    return 0;
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
     return 0;
