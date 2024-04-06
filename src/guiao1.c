@@ -3,19 +3,14 @@
 #include <string.h>
 #include <math.h>
 #include <locale.h>
-#include <uchar.h>
-
-// char cardvalues[14] = {'1', '2', '3', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E'};
+#include <wchar.h>
 
 wchar_t highestCard(wchar_t cards[])
 {
     wchar_t cardCompare  = cards[0];
     for (int i = 0; cards[i] != '\0' ; i++)
     {
-        if (cardCompare < cards[i])
-        {
-            cardCompare = cards[i];
-        }
+        if (cardCompare < cards[i]) cardCompare = cards[i];
     }   
     return cardCompare;
 }
@@ -30,18 +25,71 @@ int countCards(wchar_t cards[])
     return count;
 }
 
+int conjunto(wchar_t cards[])
+{
+    for (int i = 0; cards[i] != '\0'; i++)
+    {
+        if (cards[i] % 14 == cards[0] % 14)
+        {
+            continue;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int seq(wchar_t cards[])
+{
+    wchar_t firstCard = cards[0];
+    for (int i = 0; cards[i] != '\0'; i++)
+    {
+        if (firstCard == cards[i] + 1)
+        {
+            firstCard++;
+        }
+        else return 0;
+    }
+    return 1;
+}
+
+int dseq(wchar_t cards[])
+{
+    wchar_t cardCompare = cards[0];
+    for (int i = 0; cards[i] != '\0'; i++)
+    {
+        if (cardCompare != cards[i]) return 0;
+        cardCompare++;
+    }
+    return 1;
+}
 
 int main()
 {
-    int n = 0;
-    if (scanf("%d", &n) == 1);
-    for (int i = 0; i <= n; i++)
+    setlocale(LC_ALL, "");
+    int l;
+    wchar_t cards[100] = {0x1F0BA, 0x1F0CA, 0x1F0DA, 0x1F0AA};
+    if (scanf("%d\n", &l) != 1) return 0;
+    for (int i = 0; i < l; i++)
     {
-        setlocale(LC_ALL, "");
-        wchar_t cards[100] = {0x1F0B6, 0x1F0C7, 0x1F0D3, 0x1F0AA};
-        printf("A maior carta é: %lc\n", highestCard(cards));
+        if (wscanf(L"%100ls", cards) == 0) return 0;
+
+        if (conjunto(cards) == 1)
+            wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n", countCards(cards), highestCard(cards));
+
+        else if (dseq(cards) == 1)
+            wprintf(L"sequência com %d cartas onde a carta mais alta é %lc\n", countCards(cards), highestCard(cards));
+
+        else if (seq(cards) == 1)
+            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n", countCards(cards)/2, highestCard(cards));
+
+        else
+            printf("Nada!\n");
     }
-    
+
     
 
+    return 0;
 }
