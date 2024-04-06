@@ -5,14 +5,18 @@
 #include <locale.h>
 #include <wchar.h>
 
-wchar_t maiorcarta(wchar_t cartas[])
-{
-    wchar_t cartasCompare  = cartas[0];
-    for (int i = 0; cartas[i] != '\0' ; i++)
-    {
-        if (cartasCompare < cartas[i]) cartasCompare = cartas[i];
-    }   
-    return cartasCompare;
+wchar_t maiorcarta(wchar_t cartas[], int numCartas) {
+    // ordem dos naipes: espadas < copas < ouros < paus
+    wchar_t atualMaiorCarta = cartas[0];
+    
+    for (int i = 1; i < numCartas ; i++) { // encontra a maior carta
+        if (cartas[i]%16 > atualMaiorCarta%16) // se a carta for maior
+            atualMaiorCarta = cartas[i];
+        else if (cartas[i]%16 == atualMaiorCarta%16 && cartas[i] > atualMaiorCarta) // se carta for igual e naipe maior
+            atualMaiorCarta = cartas[i];
+    }
+
+    return atualMaiorCarta;
 }
 
 int conjunto(wchar_t cartas[])
@@ -57,47 +61,29 @@ int dseq(wchar_t cartas[])
 int main()
 {
     setlocale(LC_ALL, "");
+    
     int l;
     wchar_t cartas[100];
+    
     if (wscanf(L"%d\n", &l) == 0) return 0;
+    
     for (int i = 0; i < l; i++)
     {
         if (wscanf(L" %100ls", cartas) == 0) return 0;
 
+        int numCartas = wcslen(cartas);
+        
         if (conjunto(cartas) == 1)
-            wprintf(L"conjunto com %d cartas onde a carta mais alta é: %lc\n", wcslen(cartas), maiorcarta(cartas));
+            wprintf(L"conjunto com %d cartas onde a carta mais alta é: %lc\n", numCartas, maiorcarta(cartas, numCartas));
 
         else if (dseq(cartas) == 1)
-            wprintf(L"sequência com %d cartas onde a carta mais alta é: %lc\n", wcslen(cartas), maiorcarta(cartas));
+            wprintf(L"sequência com %d cartas onde a carta mais alta é: %lc\n", numCartas, maiorcarta(cartas));
 
         else if (seq(cartas) == 1)
-            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é: %lc\n", wcslen(cartas)/2, maiorcarta(cartas));
+            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é: %lc\n", numCartas/2, maiorcarta(cartas));
 
         else
             printf("Nada!\n");
     }
     return 0;
 }
-
-/*
-int main() {
-    setlocale(LC_ALL, "");
-    int linhas;
-    if (wscanf(L"%d", &linhas) != 1) return 1; // Lê o número de linhas que vão ser lidas
-
-    for (int i = 0; i < linhas; ++i) { // Itera para cada linha
-
-        wchar_t cartas[100]; // Assume-se que cada conjunto de cartas tem no máximo 100 elementos
-        if (wscanf(L"%99ls", cartas) == 0) return 1; // Lê um conjunto de cartas
-
-        // if (conjunto(cartas) == 1)
-        if (1) // funcao conjunto e maiorcartas nao funcionam
-            wprintf(L"conjunto com %ld cartas onde a carta mais alta é %lc\n", wcslen(cartas), maiorcartas(cartas));
-        // Faltam as condicoes para as outros tipos
-        else
-            wprintf(L"Nada em %ls !", cartas);
-    }
-
-    return 0;
-}
-*/
