@@ -25,4 +25,4 @@ Contribuição
 Contribuições são bem-vindas! Abra issues ou envie pull requests no repositório do projeto.
 Licença
 
-Este projeto é distribuído sob [INSERT_LICENSE_HERE]. Consulte o arquivo LICENSE para mais informações.
+Este projeto é distribuído sob [GPL-3.0 license]. Consulte o arquivo LICENSE para mais informações.
