@@ -5,8 +5,8 @@
 #include <locale.h>
 #include <wchar.h>
 
-wchar_t maiorcarta(wchar_t cartas[], int numCartas) {
-    // ordem dos naipes: espadas < copas < ouros < paus
+wchar_t maiorCarta(wchar_t cartas[], int numCartas) {
+
     wchar_t atualMaiorCarta = cartas[0];
     
     for (int i = 1; i < numCartas ; i++) { // encontra a maior carta
@@ -19,75 +19,66 @@ wchar_t maiorcarta(wchar_t cartas[], int numCartas) {
     return atualMaiorCarta;
 }
 
-int conjunto(wchar_t cartas[])
+int conjunto(wchar_t cartas[], int numCartas)
 {
-    for (int i = 0; cartas[i] != '\0'; i++)
-    {
-        if (cartas[i] % 16 != cartas[0] % 16)
-        {
-            return 0; // as cartas nao tem o mesmo valor
-        }
-    }
-    return 1; // todas tem o mesmo valor 
+    for (int i = 0; i < numCartas; i++)
+        if (cartas[0]%16 != cartas[i]%16) return 0;
+
+    return 1;
 }
 
-int seq(wchar_t cartas[])
-{
-    int numCartas = wcslen(cartas), aux = 0;
-    wchar_t primeiraCarta = cartas[0];
-    for (int i = 0; i < numCartas - 1; i++) 
-    {
-        for (int j = 0; i < numCartas - 1; j++)
-        {
-            if ((cartas[i + j] + 1) % 16 == primeiraCarta % 16) 
-            {
-                aux++;
-                primeiraCarta = cartas[i + j];
+int seq(wchar_t cartas[], int numCartas){
+    
+    if (numCartas <= 2) return 0;
+
+    wchar_t menorCarta = cartas[0];
+
+    for (int i = 0; i < numCartas; i++) // encontra a menor carta
+        if (cartas[i]%16 < menorCarta%16) menorCarta = cartas[i];
+    
+    wchar_t cartaAtual = menorCarta;
+
+    for (int i = 0; i < numCartas-1;i++){ // itera as cartas em ordem crescente
+        int temConsecutivo = 0;
+
+        for (int j = 0; j < numCartas; j++){ // verifica se tem consecutivo
+            if ((cartaAtual%16)+1 == cartas[j]%16){
+                temConsecutivo = 1;
+                cartaAtual = cartas[j];
+                break;
             }
         }
+
+        if (temConsecutivo == 0) return 0; // não é uma sequência
     }
-    if (aux != numCartas - 1) return 0;
-    return 1; // Todas as cartas estão em ordem na sequência
+
+    return 1; // é uma sequência
 }
 
-int dseq(wchar_t cartas[])
-{
-    wchar_t cartasCompare = cartas[0];
-    for (int i = 1; cartas[i] != '\0'; i++)
-    {
-        if (cartasCompare != cartas[i]) return 0; // nao tem o mesmo valor 
-        cartasCompare = cartas[i];
-        i++;
-    }
-    return 1; // formam dupla sequencia 
-}
-
-int main()
-{
+int main() {
     setlocale(LC_ALL, "");
-    
-    int l;
-    wchar_t cartas[100];
-    
-    if (wscanf(L"%d\n", &l) == 0) return 0;
-    
-    for (int i = 0; i < l; i++)
-    {
-        if (wscanf(L" %100ls", cartas) == 0) return 0;
+    int linhas;
+    if (wscanf(L"%d", &linhas) != 1) return 1; // Lê o número de linhas que vão ser lidas
+
+    for (int i = 0; i < linhas; ++i) { // Itera para cada linha
+
+        wchar_t cartas[100]; // Assume-se que cada conjunto de cartas tem no máximo 100 elementos
+        if (wscanf(L"%100ls", cartas) == 0) return 1; // Lê um conjunto de cartas
 
         int numCartas = wcslen(cartas);
-        
-        if (conjunto(cartas) == 1)
-            wprintf(L"conjunto com %d cartas onde a carta mais alta é: %lc\n", numCartas, maiorcarta(cartas, numCartas));
 
-        else if (dseq(cartas) == 1)
-            wprintf(L"sequência com %d cartas onde a carta mais alta é: %lc\n", numCartas, maiorcarta(cartas, numCartas));
+        if (conjunto(cartas, numCartas) == 1)
+            wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n",
+                    numCartas, maiorCarta(cartas, numCartas));
+        else if (seq(cartas, numCartas) == 1)
+            wprintf(L"sequência com %d cartas onde a carta mais alta é %lc\n",
+                    numCartas, maiorCarta(cartas, numCartas));
+        else if (seq(cartas, numCartas/2) == 1)
+            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n",
+                    numCartas/2, maiorCarta(cartas, numCartas));
+        else wprintf(L"Nada!\n");
 
-        else if (seq(cartas) == 1)
-            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é: %lc\n", numCartas/2, maiorcarta(cartas, numCartas));
-
-        else
-            printf("Nada!\n");
     }
+
     return 0;
 }
