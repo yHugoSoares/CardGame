@@ -27,15 +27,12 @@ int conjunto(wchar_t cartas[], int numCartas)
     return 1;
 }
 
-// 🃈🃙🂩🂧🃗🂨
-// 🂸🃈🂧🃆🂷🂦
-
-int seq(wchar_t cartas[], int numCartas){
+int seq(wchar_t cartas[], int numCartas, int mult2){
     if (numCartas <= 2) return 0;
 
     wchar_t menorCarta = cartas[0];
 
-    for (int i = 0; i < numCartas; i++) // encontra a menor carta
+    for (int i = 0; i < numCartas*mult2; i++) // encontra a menor carta
         if (cartas[i]%16 < menorCarta%16) menorCarta = cartas[i];
     
     wchar_t cartaAtual = menorCarta;
@@ -43,7 +40,7 @@ int seq(wchar_t cartas[], int numCartas){
     for (int i = 0; i < numCartas-1;i++){ // itera as cartas em ordem crescente
         int temConsecutivo = 0;
 
-        for (int j = 0; j < numCartas*2; j++){ // verifica se tem consecutivo
+        for (int j = 0; j < numCartas*mult2; j++){ // verifica se tem consecutivo
             if ((cartaAtual%16)+1 == cartas[j]%16){
                 temConsecutivo = 1;
                 cartaAtual = cartas[j];
@@ -72,10 +69,10 @@ int main() {
         if (conjunto(cartas, numCartas) == 1)
             wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n",
                     numCartas, maiorCarta(cartas, numCartas));
-        else if (seq(cartas, numCartas) == 1)
+        else if (seq(cartas, numCartas, 1) == 1)
             wprintf(L"sequência com %d cartas onde a carta mais alta é %lc\n",
                     numCartas, maiorCarta(cartas, numCartas));
-        else if (seq(cartas, numCartas/2) == 1)
+        else if (seq(cartas, numCartas/2, 2) == 1)
             wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n",
                     numCartas/2, maiorCarta(cartas, numCartas));
         else wprintf(L"Nada!\n");
