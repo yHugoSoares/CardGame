@@ -29,6 +29,8 @@ int conjunto(wchar_t cartas[], int numCartas)
 
 int seq(wchar_t cartas[], int numCartas){
     
+    if (numCartas <= 2) return 0;
+
     wchar_t menorCarta = cartas[0];
 
     for (int i = 0; i < numCartas; i++) // encontra a menor carta
@@ -61,20 +63,20 @@ int main() {
     for (int i = 0; i < linhas; ++i) { // Itera para cada linha
 
         wchar_t cartas[100]; // Assume-se que cada conjunto de cartas tem no máximo 100 elementos
-        if (wscanf(L"%99ls", cartas) == 0) return 1; // Lê um conjunto de cartas
+        if (wscanf(L"%100ls", cartas) == 0) return 1; // Lê um conjunto de cartas
 
         int numCartas = wcslen(cartas);
 
         if (conjunto(cartas, numCartas) == 1)
-            wprintf(L"conjunto com %ld cartas onde a carta mais alta é %lc\n",
+            wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n",
                     numCartas, maiorCarta(cartas, numCartas));
         else if (seq(cartas, numCartas) == 1)
-            wprintf(L"sequência com %ld cartas onde a carta mais alta é %lc\n",
+            wprintf(L"sequência com %d cartas onde a carta mais alta é %lc\n",
                     numCartas, maiorCarta(cartas, numCartas));
         else if (seq(cartas, numCartas/2) == 1)
-            wprintf(L"dupla sequência com %ld cartas onde a carta mais alta é %lc\n",
+            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n",
                     numCartas/2, maiorCarta(cartas, numCartas));
-        else wprintf(L"Nada!\n", cartas);
+        else wprintf(L"Nada!\n");
 
     }
 
