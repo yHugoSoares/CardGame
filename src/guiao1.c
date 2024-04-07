@@ -27,8 +27,10 @@ int conjunto(wchar_t cartas[], int numCartas)
     return 1;
 }
 
+// 🃈🃙🂩🂧🃗🂨
+// 🂸🃈🂧🃆🂷🂦
+
 int seq(wchar_t cartas[], int numCartas){
-    
     if (numCartas <= 2) return 0;
 
     wchar_t menorCarta = cartas[0];
@@ -41,7 +43,7 @@ int seq(wchar_t cartas[], int numCartas){
     for (int i = 0; i < numCartas-1;i++){ // itera as cartas em ordem crescente
         int temConsecutivo = 0;
 
-        for (int j = 0; j < numCartas; j++){ // verifica se tem consecutivo
+        for (int j = 0; j < numCartas*2; j++){ // verifica se tem consecutivo
             if ((cartaAtual%16)+1 == cartas[j]%16){
                 temConsecutivo = 1;
                 cartaAtual = cartas[j];
@@ -56,7 +58,7 @@ int seq(wchar_t cartas[], int numCartas){
 }
 
 int main() {
-    setlocale(LC_ALL, "");
+    setlocale(LC_CTYPE, "C.UTF-8");
     int linhas;
     if (wscanf(L"%d", &linhas) != 1) return 1; // Lê o número de linhas que vão ser lidas
 
