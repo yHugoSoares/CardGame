@@ -18,6 +18,46 @@ int combinacaoValida (wchar_t cartas[], int numCartas){
     return r;
 }
 
+void merge (int r[], int a[], int b[], int na, int nb){
+    int i, j, k = 0;
+
+    while (i < na && j < nb) {
+        if (a[i] <= b[j]) {
+            r[k] = a[i];
+            i++;
+        } else {
+            r[k] = b[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < na) {
+        r[k] = a[i];
+        i++;
+        k++;
+    }
+    while (j < nb) {
+        r[k] = b[j];
+        j++;
+        k++;
+    }
+}
+
+void copy (wchar_t s[], wchar_t aux[], int numCartas){
+    for (int i = 0; i < numCartas; i++){
+        s[i] = aux [i];
+    }
+}
+void msort (wchar_t cartas[], int numCartas){
+    if (numCartas < 2) return;
+    int m = numCartas/2;
+    wchar_t aux[numCartas];
+    msort (cartas, m);
+    msort (cartas+m, numCartas-m);
+    merge(cartas, m, cartas+m, numCartas-m, aux);
+    copy(aux, cartas, numCartas);
+}
+
 int main() 
 {    
     setlocale(LC_CTYPE, "C.UTF-8");
@@ -33,6 +73,7 @@ int main()
         
         int primeiro_comprimento;
         int tipo_de_combinacao; // guarda o tipo da primeira linha
+        wchar_t carta_mais_alta; // carta mais alta da primeira linha
 
         for (int j = 0; j < linhas; ++j){ // itera para cada linha
 
@@ -47,10 +88,15 @@ int main()
         if (j == 0) {
             primeiro_comprimento = numCartas;
             tipo_de_combinacao = combinacaoValida (cartas, numCartas);
+            carta_mais_alta = maiorCarta(cartas, numCartas);
         }
         else if ((primeiro_comprimento != numCartas) || (tipo_de_combinacao != combinacaoValida (cartas, numCartas))){
             printf ("Combinações não iguais!");
             break;
+        }
+        msort (cartas, numCartas);
+        if (maiorCarta (cartas, numCartas) > carta_mais_alta){
+            
         }
         }
     }
