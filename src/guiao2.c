@@ -6,10 +6,18 @@
 #include <wchar.h>
 #include <guiao1.c>
 
-// função que verifica se as sequencias são do mesmo tipo e têm o mesmo tamanho
 // função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
 // função que ordena por ordem crescente as sequências dentro de um teste
 
+// retorna um valor diferente consoante o tipo de combinação da linha
+int combinacaoValida (wchar_t cartas[], int numCartas){
+    int r;
+    if (conjunto(cartas, numCartas) == 1) r = 1;
+    else if (seq(cartas, numCartas, 1) == 1) r = 2;
+    else if (seq(cartas, numCartas/2, 2) == 1) r = 3;
+
+    return r;
+}
 
 int main() 
 {    
@@ -25,36 +33,27 @@ int main()
     if (wscanf(L"%d", &linhas) != 1) return 1; // lê o número de linhas que vão ser lidas
         
         int primeiro_comprimento;
+        int tipo_de_combinacao; // guarda o tipo da primeira linha
 
         for (int j = 0; j < linhas; ++j){ // itera para cada linha
 
-        int comprimento;
+        int numCartas;
 
         wchar_t cartas[100]; // assume-se que cada conjunto de cartas tem no máximo 100 elementos
 
         if (wscanf(L"%100ls", cartas) == 0) return 1; // lê um conjunto de cartas
 
-        comprimento = wcslen (cartas);
-        
-        if (j == 0) primeiro_comprimento = comprimento;
-        else if (primeiro_comprimento != comprimento){
+        numCartas = wcslen (cartas);
+
+        if (j == 0) {
+            primeiro_comprimento = numCartas;
+            tipo_de_combinacao = combinacaoValida (cartas, numCartas);
+        }
+        else if ((primeiro_comprimento != numCartas) || (tipo_de_combinacao != combinacaoValida (cartas, numCartas))){
             printf ("Combinações não iguais!");
             break;
         }
-
-
-        if (conjunto(cartas, numCartas) == 1)
-            wprintf(L"conjunto com %d cartas onde a carta mais alta é %lc\n",
-                    numCartas, maiorCarta(cartas, numCartas));
-        else if (seq(cartas, numCartas, 1) == 1)
-            wprintf(L"sequência com %d cartas onde a carta mais alta é %lc\n",
-                    numCartas, maiorCarta(cartas, numCartas));
-        else if (seq(cartas, numCartas/2, 2) == 1)
-            wprintf(L"dupla sequência com %d cartas onde a carta mais alta é %lc\n",
-                    numCartas/2, maiorCarta(cartas, numCartas));
-        else wprintf(L"Nada!\n");
-
-    }
+        }
     }
     return 0;
 }
