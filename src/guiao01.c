@@ -37,6 +37,33 @@ int conjunto(wchar_t cartas[], int numCartas) // verifica se é um conjunto
     return 1;
 }
 
+int checkConsecutivo(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual, int *indexConsecutivo)
+{
+    for (int j = 0; j < numCartas*mult2; j++)
+    {
+        if ((cartaAtual%16)+1 == cartas[j]%16) // verifica se tem consecutivo
+        {
+            *indexConsecutivo = j;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int checkImagem(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual)
+{
+    for (int j = 0; j < numCartas*mult2; j++)
+    {
+        if (cartaAtual%16 == cartas[j]%16 && cartaAtual != cartas[j]) // verifica se tem imagem
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int seq(wchar_t cartas[], int numCartas, int mult2) // verifica se é uma sequência
 {
 
@@ -49,27 +76,19 @@ int seq(wchar_t cartas[], int numCartas, int mult2) // verifica se é uma sequê
     
     wchar_t cartaAtual = menorCarta;
 
-    for (int i = 0; i < numCartas-1;i++) // itera o conjunto de cartas por ordem crescente
+    for (int i = 0; i < numCartas;i++) // itera o conjunto de cartas por ordem crescente
     {
+        int indexConsecutivo = 0;
         int temConsecutivo = 0;
+        int temImagem = 1;
 
-        for (int j = 0; j < numCartas*mult2; j++) // verifica se tem consecutivo
-        {
-            if ((cartaAtual%16)+1 == cartas[j]%16)
-            {
-                for (int k = 0; k < numCartas*mult2; k++)
-                {
-                    if (cartaAtual % 16 == cartas[k] % 16 && cartaAtual != cartas[k]) 
-                    {
-                        temConsecutivo = 1;
-                        cartaAtual = cartas[j];
-                    }
-                }
-                break;
-            }
-            
-        }
-        if (temConsecutivo == 0) return 0; // se não tiver uma carta consecutiva
+        if (i == numCartas-1) temConsecutivo = 1; // a última carta tem consecutivo por defeito
+        else temConsecutivo = checkConsecutivo(cartas,numCartas,mult2,cartaAtual,&indexConsecutivo); // teste se tem consecutivo
+
+        if (mult2 == 2) temImagem = checkImagem(cartas,numCartas,mult2,cartaAtual); // testa se tem imagem (caso dupla sequencia)
+
+        if (temConsecutivo && temImagem) cartaAtual = cartas[indexConsecutivo];
+        if (temConsecutivo == 0 || temImagem == 0) return 0; // se não tiver uma carta consecutiva ou imagem
     }
 
     return 1;
