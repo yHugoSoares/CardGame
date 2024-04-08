@@ -94,6 +94,7 @@ int seq(wchar_t cartas[], int numCartas, int mult2) // verifica se é uma sequê
     return 1;
 }
 
+
 int main() 
 {    
     setlocale(LC_CTYPE, "C.UTF-8");

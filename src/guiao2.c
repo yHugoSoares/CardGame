@@ -4,7 +4,7 @@
 #include <math.h>
 #include <locale.h>
 #include <wchar.h>
-#include <guiao1.c>
+#include <guiao01.c>
 
 // função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
 // função que ordena por ordem crescente as sequências dentro de um teste
@@ -45,11 +45,13 @@ int main()
 
         numCartas = wcslen (cartas);
 
-        if (j == 0) {
+        if (j == 0)
+        {
             primeiro_comprimento = numCartas;
             tipo_de_combinacao = combinacaoValida (cartas, numCartas);
         }
-        else if ((primeiro_comprimento != numCartas) || (tipo_de_combinacao != combinacaoValida (cartas, numCartas))){
+        else if ((primeiro_comprimento != numCartas) || (tipo_de_combinacao != combinacaoValida (cartas, numCartas)))
+        {
             printf ("Combinações não iguais!");
             break;
         }
