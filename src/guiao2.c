@@ -4,6 +4,7 @@
 #include <math.h>
 #include <locale.h>
 #include <wchar.h>
+#include <guiao1.c>
 
 // função que verifica se as sequencias são do mesmo tipo e têm o mesmo tamanho
 // função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
