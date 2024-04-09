@@ -158,52 +158,73 @@ int tamanhoIgual(wchar_t cartas[][100], int linhas)
     return 1;
 }
 
-// implementação do insertion sort para ordenar as cartas de uma sequência
-void isort(wchar_t a[], int numCartas) 
-{	
-    int i, j;
-    wchar_t aux;
-    for (i = 0; i < numCartas; i++) 
-    {
-        aux = a[i];	
-        for (j = i; j > 0 && a[j-1] > aux; j--) a[j] = a[j-1];	
-        a[j] = aux;	
-    }	
-}
-
-// troca de posição duas sequências
-void swap (int v[][100], int i, int j, int numCartas){
+// implementação do swap para troca de posição duas sequências
+void swapS (int cartas[][100], int i, int j, int numCartas){
     
     wchar_t aux[numCartas];
 
     for(int k = 0; k < numCartas; k++){
-        aux[k] = v[i][k];
+        aux[k] = cartas[i][k];
     }
     for(int k = 0; k < numCartas; k++){
-        v[i][k] = v[j][k];
+        cartas[i][k] = cartas[j][k];
     }
     for(int k = 0; k < numCartas; k++){
-        v[j][k] = aux[k];
+        cartas[j][k] = aux[k];
     }
 }
 
 // implementação do bubble sort para ordenar as sequências
-void bsort(wchar_t cartas[][100], int linhas, int numCartas) {	
+void bsortS(wchar_t cartas[][100], int linhas, int numCartas) {	
         int i, j;	
         for (i = linhas; i > 0; i--)	
             for (j = 1; j < i; j++)	
-                if (cartas[j-1][numCartas] > cartas[j][numCartas])	
-                    swap(cartas, j-1, j, numCartas);	
+                if (cartas[j-1][numCartas-1]%16 > cartas[j][numCartas-1]%16 ||
+                    (cartas[j-1][numCartas-1]%16 == cartas[j][numCartas-1]%16 &&
+                     cartas[j-1][numCartas-1] > cartas[j][numCartas-1]))
+                    swapS(cartas, j-1, j, numCartas);	
 }
+
+// implementação do swap para troca de posição duas cartas
+void swapC (wchar_t cartas[], int i, int j){
+    wchar_t aux = cartas[i];
+    cartas[i] = cartas[j];
+    cartas[j] = aux;
+}
+
+// implementação do bubble sort para ordenar as cartas de uma sequência
+void bsortC(wchar_t cartas[], int numCartas) {	
+        int i, j;	
+        for (i = numCartas; i > 0; i--)	
+            for (j = 1; j < i; j++)	
+                if (cartas[j-1]%16 > cartas[j]%16 || (cartas[j-1]%16 == cartas[j]%16 && cartas[j-1] > cartas[j]))	
+                    swapC(cartas, j-1, j);	
+}
+
 
 // ordena as sequências e as cartas das sequências por ordem crescente
 void ordena(wchar_t cartas[][100], int linhas, int numCartas)
 {
     for (int i = 0; i < linhas; i++)
-        isort(cartas[i], numCartas);
-    bsort(cartas, linhas, numCartas);
+        bsortC(cartas[i], numCartas);
+        // isort(cartas[i], numCartas);
+    bsortS(cartas, linhas, numCartas);
 }
 
+void printCartas(wchar_t cartas[][100], int linhas, int numCartas)
+{
+    for (int k = 0; k < linhas; k++)
+    {
+       for (int t = 0; t < numCartas; t++)
+       {
+            if (t == numCartas-1)
+                wprintf(L"%lc", cartas[k][t]);
+            else
+                wprintf(L"%lc ", cartas[k][t]);
+       }
+       wprintf(L"\n");
+    }
+}
 
 int main()
 {    
@@ -231,10 +252,6 @@ int main()
         // print do teste atual
         wprintf(L"Teste %d\n", i+1);
 
-        // Debug
-        // wprintf(L"Combinações iguais:%d | Tamanho igual: %d\n",
-        //         tamanhoIgual(cartas,linhas), combinacoesIguais(cartas,linhas));
-
         // verifica se as sequências de cartas são do mesmo tipo e tamanho
         if (tamanhoIgual(cartas, linhas) && combinacoesIguais(cartas, linhas))
         { 
@@ -244,18 +261,10 @@ int main()
             // ordena as sequências e as cartas das sequências por ordem crescente
             ordena(cartas, linhas, numCartas);
 
+
+            printCartas(cartas, linhas, numCartas);
             // print das sequências de cartas ordenadas
-            for (int k = 0; k < linhas; k++)
-            {
-               for (int t = 0; t < numCartas; t++)
-               {
-                    if (t == numCartas-1)
-                        wprintf(L"%lc", cartas[k][t]);
-                    else
-                        wprintf(L"%lc ", cartas[k][t]);
-               }
-               wprintf(L"\n");
-            }
+
         }
         // caso não tenham o mesmo tipo ou tamanho
         else wprintf(L"Combinações não iguais!\n");
