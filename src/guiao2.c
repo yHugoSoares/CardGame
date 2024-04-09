@@ -7,13 +7,28 @@
 
 
 // escrever função combinacoesIguais (usar funcoes do guiao01)
-
+int combinacoesIguais(wchar_t cartas[][], int linhas)
+{
+    // código
+    return 0;
+}
 
 // escrever função tamanhoIgual
+int tamanhoIgual(wchar_t cartas[][100], int linhas)
+{
+    int atualTamanho = wcslen(cartas[0]);
+    for(int i = 0; i < linhas; i++){
+        if (atualTamanho != wcslen(cartas[i])) return 0;
+    }
 
+    return 1;
+}
 
 // escrever função ordena
-
+void ordena(wchar_t cartas[][], int linhas)
+{
+    // código
+}
 
 
 int main()
@@ -44,7 +59,7 @@ int main()
         wprintf(L"Teste %d\n", i+1);
 
         // verifica se as sequências de cartas são do mesmo tipo e tamanho
-        if (combinacoesIguais(cartas) && tamanhoIgual(cartas)){
+        if (tamanhoIgual(cartas, linhas) && combinacoesIguais(cartas, linhas)){
             
             // ordena as cartas por ordem crescente
             ordena(cartas);
@@ -145,3 +160,4 @@ int main()
             // }
 // 
         // }
+ 
