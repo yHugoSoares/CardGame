@@ -158,57 +158,57 @@ int tamanhoIgual(wchar_t cartas[][100], int linhas)
     return 1;
 }
 
+// compara duas cartas (retorna 1 quando a primeira é maior)
+int comparaCartas(wchar_t carta1, wchar_t carta2)
+{
+    if (carta1%16 > carta2%16 || (carta1%16 == carta2%16 && carta1 > carta2))
+        return 1;
+    else
+        return 0;
+}
+
 // implementação do swap para troca de posição duas sequências
-void swapS (int cartas[][100], int i, int j, int numCartas){
-    
+void swap(int cartas[][100], int i, int j, int numCartas)
+{
     wchar_t aux[numCartas];
 
-    for(int k = 0; k < numCartas; k++){
+    for(int k = 0; k < numCartas; k++)
         aux[k] = cartas[i][k];
-    }
-    for(int k = 0; k < numCartas; k++){
+    for(int k = 0; k < numCartas; k++)
         cartas[i][k] = cartas[j][k];
-    }
-    for(int k = 0; k < numCartas; k++){
+    for(int k = 0; k < numCartas; k++)
         cartas[j][k] = aux[k];
-    }
 }
 
 // implementação do bubble sort para ordenar as sequências
-void bsortS(wchar_t cartas[][100], int linhas, int numCartas) {	
-        int i, j;	
-        for (i = linhas; i > 0; i--)	
-            for (j = 1; j < i; j++)	
-                if (cartas[j-1][numCartas-1]%16 > cartas[j][numCartas-1]%16 ||
-                    (cartas[j-1][numCartas-1]%16 == cartas[j][numCartas-1]%16 &&
-                     cartas[j-1][numCartas-1] > cartas[j][numCartas-1]))
-                    swapS(cartas, j-1, j, numCartas);	
+void bsort(wchar_t cartas[][100], int linhas, int numCartas) {	
+    int i, j;	
+    for (i = linhas; i > 0; i--)	
+        for (j = 1; j < i; j++)	
+            if (comparaCartas(cartas[j-1][numCartas-1],cartas[j][numCartas-1]))
+                swap(cartas, j-1, j, numCartas);	
 }
 
-// implementação do swap para troca de posição duas cartas
-void swapC (wchar_t cartas[], int i, int j){
-    wchar_t aux = cartas[i];
-    cartas[i] = cartas[j];
-    cartas[j] = aux;
+// implementação do insertion sort para ordenar as cartas de uma sequência
+void isort(wchar_t cartas[], int numCartas) 
+{	
+    int i, j;
+    wchar_t aux;
+    for (i = 0; i < numCartas; i++) 
+    {
+        aux = cartas[i];	
+        for (j = i; j > 0 && comparaCartas(cartas[j-1],aux); j--)
+            cartas[j] = cartas[j-1];	
+        cartas[j] = aux;	
+    }	
 }
-
-// implementação do bubble sort para ordenar as cartas de uma sequência
-void bsortC(wchar_t cartas[], int numCartas) {	
-        int i, j;	
-        for (i = numCartas; i > 0; i--)	
-            for (j = 1; j < i; j++)	
-                if (cartas[j-1]%16 > cartas[j]%16 || (cartas[j-1]%16 == cartas[j]%16 && cartas[j-1] > cartas[j]))	
-                    swapC(cartas, j-1, j);	
-}
-
 
 // ordena as sequências e as cartas das sequências por ordem crescente
 void ordena(wchar_t cartas[][100], int linhas, int numCartas)
 {
     for (int i = 0; i < linhas; i++)
-        bsortC(cartas[i], numCartas);
-        // isort(cartas[i], numCartas);
-    bsortS(cartas, linhas, numCartas);
+         isort(cartas[i], numCartas);
+    bsort(cartas, linhas, numCartas);
 }
 
 void printCartas(wchar_t cartas[][100], int linhas, int numCartas)
@@ -273,3 +273,4 @@ int main()
     
     return 0;
 }
+ 
