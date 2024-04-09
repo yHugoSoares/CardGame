@@ -5,6 +5,64 @@
 #include <locale.h>
 #include <wchar.h>
 
+
+// escrever função combinacoesIguais (usar funcoes do guiao01)
+
+
+// escrever função tamanhoIgual
+
+
+// escrever função ordena
+
+
+
+int main()
+{    
+    setlocale(LC_CTYPE, "C.UTF-8");
+    
+    int testes;
+    int linhas;
+
+    // lê o número de testes que vão ser lidos
+    if (wscanf(L"%d", &testes) != 1) return 1; 
+
+    // itera para cada teste
+    for (int i = 0; i < testes; i++)
+    {
+        // lê o número de linhas que vão ser lidas
+        if (wscanf(L"%d", &linhas) != 1) return 1;
+
+        // array de sequência de cartas
+        wchar_t cartas[linhas][100];
+
+        // itera para cada linha
+        for (int j = 0; j < linhas; j++)
+            // guarda as linhas num array (array de sequência de cartas)
+            if (wscanf(L"%100ls", &cartas[j][0]) == 0) return 1;
+
+        // print do teste atual        
+        wprintf(L"Teste %d\n", i+1);
+
+        // verifica se as sequências de cartas são do mesmo tipo e tamanho
+        if (combinacoesIguais(cartas) && tamanhoIgual(cartas)){
+            
+            // ordena as cartas por ordem crescente
+            ordena(cartas);
+
+            // print das sequências de cartas ordenadas
+            for (int k = 0; k < linhas; k++)
+                wprintf(L"%ls\n", cartas[k]);
+
+        }
+        // caso não tenham o mesmo tipo ou tamanho
+        else wprintf(L"Combinações não iguais!");
+
+
+    }
+    
+    return 0;
+}
+
 // função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
 // função que ordena por ordem crescente as sequências dentro de um teste
 
@@ -58,30 +116,6 @@
     // copy(aux, cartas, numCartas);
 // }
 
-int main() 
-{    
-    setlocale(LC_CTYPE, "C.UTF-8");
-    
-    int testes;
-    int linhas;
-
-    if (wscanf(L"%d", &testes) != 1) return 1; // lê o número de testes que vão ser lidos
-
-    for (int i = 0; i < testes; i++) // itera para cada teste
-    {
-        if (wscanf(L"%d", &linhas) != 1) return 1; // lê o número de linhas que vão ser lidas
-        wchar_t cartas[linhas][100];
-
-        for (int j = 0; j < linhas; j++) // itera para cada linha
-            if (wscanf(L"%100ls", &cartas[j][0]) == 0) return 1; // guarda cada linha num array de linhas
-        
-        for (int k = 0; k < linhas; k++)
-            wprintf(L"%ls\n", cartas[k]); // dá print das linhas
-    }
-    
-    return 0;
-}
-
         // int primeiro_comprimento;
         // int tipo_de_combinacao; // guarda o tipo da primeira linha
         // wchar_t carta_mais_alta; // carta mais alta da primeira linha
@@ -111,4 +145,3 @@ int main()
             // }
 // 
         // }
- 
