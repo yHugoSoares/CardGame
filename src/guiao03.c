@@ -6,16 +6,47 @@
 #include <wchar.h>
 #include "functions.h"
 
+// KING VALUE (mod 16) = 14
+
+wchar_t teste(wchar_t maoCartas, wchar_t jogadasAnteriores[100], wchar_t jogadaAtual, int numJogadasAnteriores)
+{
+    
+}
 
 int main()
 {
-    setlocale(LC_ALL, "pt_PT.UTF-8");
+    setlocale(LC_CTYPE, "C.UTF-8");
 
-    wchar_t cartas[10] = {0x1F0A1, 0x1F0A2, 0x1F0A3, 0x1F0A4, 0x1F0A5, 0x1F0A6, 0x1F0A7, 0x1F0A8, 0x1F0A9, 0x1F0AA};
-    int numCartas = 10;
+    int testes, numJogadasAnteriores;
+    wchar_t maoCartas[100], jogadaAtual[100];
 
-    printf("Conjunto: %d\n", conjunto(cartas, numCartas));
-    printf("Sequência: %d\n", seq(cartas, numCartas, 1));
+    // lê o número de testes que vão ser lidos
+    assert(wscanf(L"%d", &testes) != 1); 
+
+    // itera para cada teste
+    for (int i = 0; i < testes; i++)
+    {
+        // lê e guarda o número de jogadas passadas que vão ser lidas
+        assert(wscanf(L"%d", &numJogadasAnteriores) != 1);
+
+        // array de jogadas passadas
+        wchar_t jogadasAnteriores[numJogadasAnteriores][100];
+
+        // lê e guarda as cartas do jogador
+        assert(wscanf(L"%100ls", maoCartas) != 1);
+        
+        // lê e guarda as jogadas anteriores (linha a linha)
+        for (int j = 0; j < numJogadasAnteriores; j++)
+        {
+            assert(wscanf(L"%100ls", &jogadasAnteriores[j][0]) == 0);
+        }
+
+
+        // print do teste atual
+        wprintf(L"Teste %d\n", i+1);
+        teste(maoCartas, jogadasAnteriores, jogadaAtual, numJogadasAnteriores);
+        wprintf(L"%100ls\n", maoCartas);
+    }
 
     return 0;
 }
