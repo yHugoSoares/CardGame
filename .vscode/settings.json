@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "wchar.h": "c"
+        "wchar.h": "c",
+        "string.h": "c",
+        "stdio.h": "c"
     }
 }

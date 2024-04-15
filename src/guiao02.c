@@ -166,7 +166,7 @@ int comparaCartas(wchar_t carta1, wchar_t carta2)
 }
 
 // implementação do swap para troca de posição duas sequências
-void swap(int cartas[][100], int i, int j, int numCartas)
+void swap(wchar_t cartas[][100], int i, int j, int numCartas)
 {
     wchar_t aux[numCartas];
 
@@ -222,4 +222,52 @@ void printCartas(wchar_t cartas[][100], int linhas, int numCartas)
        }
        wprintf(L"\n");
     }
+}
+
+int main()
+{    
+    setlocale(LC_CTYPE, "C.UTF-8");
+    
+    int testes;
+    int linhas;
+
+    // lê o número de testes que vão ser lidos
+    if (wscanf(L"%d", &testes) != 1) return 1; 
+
+    // itera para cada teste
+    for (int i = 0; i < testes; i++)
+    {
+        // lê e guarda o número de linhas que vão ser lidas
+        if (wscanf(L"%d", &linhas) != 1) return 1;
+
+        // array de sequência de cartas
+        wchar_t cartas[linhas][100];
+
+        // lê e guarda o input de cada linha num array (array de sequência de cartas)
+        for (int j = 0; j < linhas; j++)
+            if (wscanf(L"%100ls", &cartas[j][0]) == 0) return 1;
+        
+        // print do teste atual
+        wprintf(L"Teste %d\n", i+1);
+
+        // verifica se as sequências de cartas são do mesmo tipo e tamanho
+        if (tamanhoIgual(cartas, linhas) && combinacoesIguais(cartas, linhas))
+        { 
+            // número de cartas em cada sequência
+            int numCartas = wcslen(cartas[0]);
+
+            // ordena as sequências e as cartas das sequências por ordem crescente
+            ordena(cartas, linhas, numCartas);
+
+
+            printCartas(cartas, linhas, numCartas);
+            // print das sequências de cartas ordenadas
+
+        }
+        // caso não tenham o mesmo tipo ou tamanho
+        else wprintf(L"Combinações não iguais!\n");
+
+    }
+    
+    return 0;
 }

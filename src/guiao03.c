@@ -4,8 +4,8 @@
 #include <math.h>
 #include <locale.h>
 #include <wchar.h>
-#include <guiao01.h>
-#include <guiao02.h>
+#include "functions.h"
+
 
 int main()
 {
