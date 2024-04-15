@@ -37,6 +37,51 @@ int conjunto(wchar_t cartas[], int numCartas) // verifica se é um conjunto
     return 1;
 }
 
+// verifica se todas as sequências são do mesmo tipo (conjunto, sequência ou dupla sequência)
+int combinacoesIguais(wchar_t cartas[][100], int linhas)
+{
+   
+    int eConjunto = 0;
+    // verifica se todas as sequências são do tipo conjunto
+    for(int n = 0; n < linhas; n++)
+    {
+        if(conjunto(cartas[n],wcslen(cartas[n]))) eConjunto = 1;
+        else
+        {
+            eConjunto = 0;
+            break;
+        }
+    }
+
+    int eSequencia = 0;
+    // verifica se todas as sequências são do tipo sequência
+    for(int n = 0; n < linhas; n++)
+    {
+        if(seq(cartas[n],wcslen(cartas[n]),1)) eSequencia = 1;
+        else
+        {
+            eSequencia = 0;
+            break;
+        }
+    }
+
+    int eDuplaSequencia = 0;
+    // verifica se todas as sequências são do tipo sequência dupla
+    for(int n = 0; n < linhas; n++)
+    {
+        if(seq(cartas[n],wcslen(cartas[n])/2,2)) eDuplaSequencia = 1;
+        else
+        {
+            eDuplaSequencia = 0;
+            break;
+        }
+    }
+
+    if(eConjunto || eSequencia || eDuplaSequencia) return 1;
+    else return 0;
+
+}
+
 int checkConsecutivo(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual, int *indexConsecutivo)
 {
     for (int j = 0; j < numCartas*mult2; j++)
