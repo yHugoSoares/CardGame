@@ -5,382 +5,268 @@
 #include <locale.h>
 #include <wchar.h>
 
-<<<<<<< HEAD
-
-// função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
-// função que ordena por ordem crescente as sequências dentro de um teste
-
-// retorna um valor diferente consoante o tipo de combinação da linha
-int combinacaoValida (wchar_t cartas[], int numCartas)
-{
-    int r;
-    if (conjunto(cartas, numCartas) == 1) r = 1;
-    else if (seq(cartas, numCartas, 1) == 1) r = 2;
-    else if (seq(cartas, numCartas/2, 2) == 1) r = 3;
-=======
-
-// funcao que determina a maior carta
-wchar_t maiorCarta(wchar_t cartas[], int numCartas) // encontra a maior carta
-{
-    wchar_t atualMaiorCarta = cartas[0];
->>>>>>> 84fb6ecd7238a560f06dd3d7b646be64685b0af7
-
-    // ordem dos naipes: espadas < copas < ouros < paus
-
-    for (int i = 1; i < numCartas ; i++) // itera o conjunto de cartas
-    {
-        if (cartas[i]%16 > atualMaiorCarta%16) 
-        // se a carta for maior
-            atualMaiorCarta = cartas[i];
-        else if (cartas[i]%16 == atualMaiorCarta%16 && cartas[i] > atualMaiorCarta) 
-        // se carta for igual e naipe maior
-            atualMaiorCarta = cartas[i];
-    }
-
-    return atualMaiorCarta;
-}
-
-<<<<<<< HEAD
-void merge (int r[], int a[], int b[], int na, int nb)
-{
-    int i, j, k = 0;
-    while (i < na && j < nb) 
-    {
-        if (a[i] <= b[j]) 
-        {
-            r[k] = a[i];
-            i++;
-        } 
-        else 
-        {
-            r[k] = b[j];
-            j++;
-        }
-        k++;
-    }
-    while (i < na) 
-    {
-        r[k] = a[i];
-        i++;
-        k++;
-    }
-    while (j < nb) 
-    {
-        r[k] = b[j];
-        j++;
-        k++;
-    }
-}
-
-void copy (wchar_t s[], wchar_t aux[], int numCartas)
+int conjunto(wchar_t cartas[], int numCartas) // verifica se é um conjunto
 {
     for (int i = 0; i < numCartas; i++)
     {
-        s[i] = aux [i];
-    }
-}
-void msort (wchar_t cartas[], int numCartas)
-{
-    if (numCartas < 2) return;
-    int m = numCartas/2;
-=======
-// verifica se é um conjunto
-int conjunto(wchar_t cartas[], int numCartas)
-{
-    for (int i = 0; i < numCartas; i++)
-    {
-         // se as cartas forem diferentes
-        if (cartas[0]%16 != cartas[i]%16) return 0;
+        if (cartas[0]%16 != cartas[i]%16) return 0; // se as cartas forem diferentes
         for (int j = 0; j < numCartas; j++)
-            // se houver cartas iguais
-            if (cartas[i] == cartas[j] && i != j) return 0;
+        {
+            if (cartas[i] == cartas[j] && i != j) return 0; // se houver cartas iguais
+        }
     }    
     return 1;
 }
 
-// verifica se tem consecutivo
 int checkConsecutivo(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual, int *indexConsecutivo)
 {
     for (int j = 0; j < numCartas*mult2; j++)
-        if ((cartaAtual%16)+1 == cartas[j]%16) 
+    {
+        if ((cartaAtual%16)+1 == cartas[j]%16) // verifica se tem consecutivo
         {
             *indexConsecutivo = j;
             return 1;
         }
+    }
 
     return 0;
 }
 
-// verifica se tem imagem
 int checkImagem(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual)
 {
     for (int j = 0; j < numCartas*mult2; j++)
-        if (cartaAtual%16 == cartas[j]%16 && cartaAtual != cartas[j]) return 1;
+    {
+        if (cartaAtual%16 == cartas[j]%16 && cartaAtual != cartas[j]) // verifica se tem imagem
+        {
+            return 1;
+        }
+    }
 
     return 0;
 }
 
-// verifica se é uma sequência
-int seq(wchar_t cartas[], int numCartas, int mult2)
+int seq(wchar_t cartas[], int numCartas, int mult2) // verifica se é uma sequência
 {
 
-    // se não tem cartas suficientes para formar uma sequência
-    if (numCartas <= 2) return 0;
+    if (numCartas <= 2) return 0; // se não tem cartas suficientes para formar uma sequência
 
     wchar_t menorCarta = cartas[0];
 
-    // encontra a menor carta
-    for (int i = 0; i < numCartas*mult2; i++)
+    for (int i = 0; i < numCartas*mult2; i++) // encontra a menor carta
         if (cartas[i]%16 < menorCarta%16) menorCarta = cartas[i];
     
     wchar_t cartaAtual = menorCarta;
 
-    // itera o conjunto de cartas por ordem crescente
-    for (int i = 0; i < numCartas;i++)
+    for (int i = 0; i < numCartas;i++) // itera o conjunto de cartas por ordem crescente
     {
         int indexConsecutivo = 0;
         int temConsecutivo = 0;
         int temImagem = 1;
 
-        // se for a última carta tem consecutivo por defeito, se não testa se tem consecutivo
-        if (i == numCartas-1) temConsecutivo = 1;
-        else temConsecutivo = checkConsecutivo(cartas,numCartas,mult2,cartaAtual,&indexConsecutivo);
+        if (i == numCartas-1) temConsecutivo = 1; // a última carta tem consecutivo por defeito
+        else temConsecutivo = checkConsecutivo(cartas,numCartas,mult2,cartaAtual,&indexConsecutivo); // teste se tem consecutivo
 
-        // testa se tem imagem (no caso de dupla sequência)
-        if (mult2 == 2) temImagem = checkImagem(cartas,numCartas,mult2,cartaAtual);
+        if (mult2 == 2) temImagem = checkImagem(cartas,numCartas,mult2,cartaAtual); // testa se tem imagem (caso dupla sequencia)
 
         if (temConsecutivo && temImagem) cartaAtual = cartas[indexConsecutivo];
-
-        // se não tiver uma carta consecutiva ou imagem
-        if (temConsecutivo == 0 || temImagem == 0) return 0;
+        if (temConsecutivo == 0 || temImagem == 0) return 0; // se não tiver uma carta consecutiva ou imagem
     }
 
     return 1;
 }
 
 
-// verifica se todas as sequências são do mesmo tipo (conjunto, sequência ou dupla sequência)
+// escrever função combinacoesIguais (usar funcoes do guiao01)
 int combinacoesIguais(wchar_t cartas[][100], int linhas)
 {
    
     int eConjunto = 0;
-    // verifica se todas as sequências são do tipo conjunto
     for(int n = 0; n < linhas; n++)
-    {
+    {   
+        //vê se é um conjunto
         if(conjunto(cartas[n],wcslen(cartas[n]))) eConjunto = 1;
         else
         {
             eConjunto = 0;
             break;
         }
+
     }
 
     int eSequencia = 0;
-    // verifica se todas as sequências são do tipo sequência
     for(int n = 0; n < linhas; n++)
-    {
+    {   
+        //vê se é uma sequencia
         if(seq(cartas[n],wcslen(cartas[n]),1)) eSequencia = 1;
         else
         {
             eSequencia = 0;
             break;
         }
+
     }
 
     int eDuplaSequencia = 0;
-    // verifica se todas as sequências são do tipo sequência dupla
     for(int n = 0; n < linhas; n++)
-    {
-        if(seq(cartas[n],wcslen(cartas[n])/2,2)) eDuplaSequencia = 1;
+    {   
+        //vê se é uma dupla sequencia
+        if(seq(cartas[n],wcslen(cartas[n]),2)) eDuplaSequencia = 1;
         else
         {
             eDuplaSequencia = 0;
             break;
         }
-    }
 
+    }
     if(eConjunto || eSequencia || eDuplaSequencia) return 1;
     else return 0;
 
 }
 
-// verifica se todas as sequência têm o mesmo número de cartas
+
+// escrever função tamanhoIgual
+
 int tamanhoIgual(wchar_t cartas[][100], int linhas)
 {
     int atualTamanho = wcslen(cartas[0]);
     for(int i = 0; i < linhas; i++){
-        int tempTamanho = wcslen(cartas[i]);
-        if (atualTamanho != tempTamanho) return 0;
+        if (atualTamanho != wcslen(cartas[i])) return 0;
     }
 
     return 1;
 }
 
-// compara duas cartas (retorna 1 quando a primeira é maior)
-int comparaCartas(wchar_t carta1, wchar_t carta2)
-{
-    if (carta1%16 > carta2%16 || (carta1%16 == carta2%16 && carta1 > carta2))
-        return 1;
-    else
-        return 0;
-}
 
-// implementação do swap para troca de posição duas sequências
-void swap(int cartas[][100], int i, int j, int numCartas)
-{
->>>>>>> 84fb6ecd7238a560f06dd3d7b646be64685b0af7
-    wchar_t aux[numCartas];
+// escrever função ordena
 
-    for(int k = 0; k < numCartas; k++)
-        aux[k] = cartas[i][k];
-    for(int k = 0; k < numCartas; k++)
-        cartas[i][k] = cartas[j][k];
-    for(int k = 0; k < numCartas; k++)
-        cartas[j][k] = aux[k];
-}
 
-// implementação do bubble sort para ordenar as sequências
-void bsort(wchar_t cartas[][100], int linhas, int numCartas) {	
-    int i, j;	
-    for (i = linhas; i > 0; i--)	
-        for (j = 1; j < i; j++)	
-            if (comparaCartas(cartas[j-1][numCartas-1],cartas[j][numCartas-1]))
-                swap(cartas, j-1, j, numCartas);	
-}
-
-// implementação do insertion sort para ordenar as cartas de uma sequência
-void isort(wchar_t cartas[], int numCartas) 
-{	
-    int i, j;
-    wchar_t aux;
-    for (i = 0; i < numCartas; i++) 
-    {
-        aux = cartas[i];	
-        for (j = i; j > 0 && comparaCartas(cartas[j-1],aux); j--)
-            cartas[j] = cartas[j-1];	
-        cartas[j] = aux;	
-    }	
-}
-
-// ordena as sequências e as cartas das sequências por ordem crescente
-void ordena(wchar_t cartas[][100], int linhas, int numCartas)
-{
-    for (int i = 0; i < linhas; i++)
-         isort(cartas[i], numCartas);
-    bsort(cartas, linhas, numCartas);
-}
-
-void printCartas(wchar_t cartas[][100], int linhas, int numCartas)
-{
-    for (int k = 0; k < linhas; k++)
-    {
-       for (int t = 0; t < numCartas; t++)
-       {
-            if (t == numCartas-1)
-                wprintf(L"%lc", cartas[k][t]);
-            else
-                wprintf(L"%lc ", cartas[k][t]);
-       }
-       wprintf(L"\n");
-    }
-}
 
 int main()
 {    
     setlocale(LC_CTYPE, "C.UTF-8");
     
-    int testes, linhas;
-    
+    int testes;
+    int linhas;
 
-<<<<<<< HEAD
-    if (wscanf(L"%d", &testes) != 1) return 1; // lê o número de testes que vão ser lidos
-    for (int i = 0; i < testes; i++)
-    {
-        if (wscanf(L"%d", &linhas) != 1) return 1; // lê o número de linhas que vão ser lidas
-        for (int j = 0; j < linhas; j++)
-        {
-            wchar_t cartas[linhas][100]; // assume-se que cada conjunto de cartas tem no máximo 100 elementos
-
-            if (wscanf(L"%100ls", &cartas[j][0] == 0)) return 1; // lê um conjunto de cartas
-=======
     // lê o número de testes que vão ser lidos
     if (wscanf(L"%d", &testes) != 1) return 1; 
 
     // itera para cada teste
     for (int i = 0; i < testes; i++)
     {
-        // lê e guarda o número de linhas que vão ser lidas
+        // lê o número de linhas que vão ser lidas
         if (wscanf(L"%d", &linhas) != 1) return 1;
 
         // array de sequência de cartas
         wchar_t cartas[linhas][100];
 
-        // lê e guarda o input de cada linha num array (array de sequência de cartas)
+        // itera para cada linha
         for (int j = 0; j < linhas; j++)
+            // guarda as linhas num array (array de sequência de cartas)
             if (wscanf(L"%100ls", &cartas[j][0]) == 0) return 1;
-        
-        // print do teste atual
+
+        // print do teste atual        
         wprintf(L"Teste %d\n", i+1);
 
         // verifica se as sequências de cartas são do mesmo tipo e tamanho
-        if (tamanhoIgual(cartas, linhas) && combinacoesIguais(cartas, linhas))
-        { 
-            // número de cartas em cada sequência
-            int numCartas = wcslen(cartas[0]);
+        if (combinacoesIguais(cartas,linhas) && tamanhoIgual(cartas,linhas)){
+            
+            // ordena as cartas por ordem crescente
+            ordena(cartas);
 
-            // ordena as sequências e as cartas das sequências por ordem crescente
-            ordena(cartas, linhas, numCartas);
-
-
-            printCartas(cartas, linhas, numCartas);
             // print das sequências de cartas ordenadas
+            for (int k = 0; k < linhas; k++)
+                wprintf(L"%ls\n", cartas[k]);
 
->>>>>>> 84fb6ecd7238a560f06dd3d7b646be64685b0af7
         }
         // caso não tenham o mesmo tipo ou tamanho
-        else wprintf(L"Combinações não iguais!\n");
+        else wprintf(L"Combinações não iguais!");
+
 
     }
     
-<<<<<<< HEAD
-
-//     for (int i = 0; i < testes; ++i) // itera para cada teste
-//     {
-//     if (wscanf(L"%d", &linhas) != 1) return 1; // lê o número de linhas que vão ser lidas
-        
-//         int primeiro_comprimento, tipo_de_combinacao; // guarda o tipo da primeira linha
-//         wchar_t carta_mais_alta; // carta mais alta da primeira linha
-
-//         for (int j = 0; j < linhas; ++j) // itera para cada linha
-//         { 
-            
-
-//             if (wscanf(L"%100ls", cartas) == 0) return 1; // lê um conjunto de cartas
-
-//             int numCartas = wcslen (cartas);
-
-//             if (j == 0)
-//             {
-//                 primeiro_comprimento = numCartas;
-//                 tipo_de_combinacao = combinacaoValida (cartas, numCartas);
-//                 carta_mais_alta = maiorCarta(cartas, numCartas);
-//             }
-//             else if ((primeiro_comprimento != numCartas) || (tipo_de_combinacao != combinacaoValida (cartas, numCartas)))
-//             {
-//                 printf ("Combinações não iguais!");
-//                 break;
-//             }
-//             msort (cartas, numCartas);
-//             if (maiorCarta (cartas, numCartas) > carta_mais_alta)
-//             {
-                
-//             }
-//         }
-//     }
-//     return 0;
-}
-=======
     return 0;
 }
- 
->>>>>>> 84fb6ecd7238a560f06dd3d7b646be64685b0af7
+
+// função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
+// função que ordena por ordem crescente as sequências dentro de um teste
+
+// retorna um valor diferente consoante o tipo de combinação da linha
+// int combinacaoValida (wchar_t cartas[], int numCartas){
+    // int r;
+    // if (conjunto(cartas, numCartas) == 1) r = 1;
+    // else if (seq(cartas, numCartas, 1) == 1) r = 2;
+    // else if (seq(cartas, numCartas/2, 2) == 1) r = 3;
+// 
+    // return r;
+// }
+// 
+// void merge (int r[], int a[], int b[], int na, int nb){
+    // int i, j, k = 0;
+// 
+    // while (i < na && j < nb) {
+        // if (a[i] <= b[j]) {
+            // r[k] = a[i];
+            // i++;
+        // } else {
+            // r[k] = b[j];
+            // j++;
+        // }
+        // k++;
+    // }
+    // while (i < na) {
+        // r[k] = a[i];
+        // i++;
+        // k++;
+    // }
+    // while (j < nb) {
+        // r[k] = b[j];
+        // j++;
+        // k++;
+    // }
+// }
+// 
+// void copy (wchar_t s[], wchar_t aux[], int numCartas){
+    // for (int i = 0; i < numCartas; i++){
+        // s[i] = aux [i];
+    // }
+// }
+// void msort (wchar_t cartas[], int numCartas){
+    // if (numCartas < 2) return;
+    // int m = numCartas/2;
+    // wchar_t aux[numCartas];
+    // msort (cartas, m);
+    // msort (cartas+m, numCartas-m);
+    // merge(cartas, m, cartas+m, numCartas-m, aux);
+    // copy(aux, cartas, numCartas);
+// }
+
+        // int primeiro_comprimento;
+        // int tipo_de_combinacao; // guarda o tipo da primeira linha
+        // wchar_t carta_mais_alta; // carta mais alta da primeira linha
+// 
+        // for (int j = 0; j < linhas; ++j) // itera para cada linha
+        // {
+// 
+            // wchar_t cartas[100]; // assume-se que cada conjunto de cartas tem no máximo 100 elementos
+            // if (wscanf(L"%100ls", cartas) == 0) return 1; // lê um conjunto de cartas
+// 
+            // int numCartas = wcslen (cartas);
+// 
+            // if (j == 0)
+            // {
+                // primeiro_comprimento = numCartas;
+                // tipo_de_combinacao = combinacaoValida (cartas, numCartas);
+                // carta_mais_alta = maiorCarta(cartas, numCartas);
+            // }
+            // else if ((primeiro_comprimento != numCartas) ||
+                    //  (tipo_de_combinacao != combinacaoValida (cartas, numCartas)))
+            // {
+                // printf ("Combinações não iguais!");
+                // break;
+            // }
+            // msort (cartas, numCartas);
+            // if (maiorCarta (cartas, numCartas) > carta_mais_alta){
+            // }
+// 
+        // }

@@ -137,57 +137,6 @@ int tamanhoIgual(wchar_t cartas[][100], int linhas)
 }
 
 
-// escrever função ordena
-
-
-
-int main()
-{    
-    setlocale(LC_CTYPE, "C.UTF-8");
-    
-    int testes;
-    int linhas;
-
-    // lê o número de testes que vão ser lidos
-    if (wscanf(L"%d", &testes) != 1) return 1; 
-
-    // itera para cada teste
-    for (int i = 0; i < testes; i++)
-    {
-        // lê o número de linhas que vão ser lidas
-        if (wscanf(L"%d", &linhas) != 1) return 1;
-
-        // array de sequência de cartas
-        wchar_t cartas[linhas][100];
-
-        // itera para cada linha
-        for (int j = 0; j < linhas; j++)
-            // guarda as linhas num array (array de sequência de cartas)
-            if (wscanf(L"%100ls", &cartas[j][0]) == 0) return 1;
-
-        // print do teste atual        
-        wprintf(L"Teste %d\n", i+1);
-
-        // verifica se as sequências de cartas são do mesmo tipo e tamanho
-        if (combinacoesIguais(cartas,linhas) && tamanhoIgual(cartas,linhas)){
-            
-            // ordena as cartas por ordem crescente
-            ordena(cartas);
-
-            // print das sequências de cartas ordenadas
-            for (int k = 0; k < linhas; k++)
-                wprintf(L"%ls\n", cartas[k]);
-
-        }
-        // caso não tenham o mesmo tipo ou tamanho
-        else wprintf(L"Combinações não iguais!");
-
-
-    }
-    
-    return 0;
-}
-
 // função ordena por ordem crescente as cartas numa linha (e adiciona um espaço entre as cartas?)
 // função que ordena por ordem crescente as sequências dentro de um teste
 
