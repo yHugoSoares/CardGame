@@ -10,7 +10,7 @@
 
 wchar_t teste(wchar_t maoCartas, wchar_t jogadasAnteriores[100], wchar_t jogadaAtual, int numJogadasAnteriores)
 {
-    
+    wcscat
 }
 
 int main()
