@@ -12,7 +12,7 @@
 int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
     int r = 0;
-    for(int j; jogadaAtual[j] != 0; j++)
+    for(int j = 0; jogadaAtual[j] != 0; j++)
         for (int i = 0; maoCartas[i] != '\0'; i++)
             r += comparaCartas(jogadaAtual[j], maoCartas[i]);
 
@@ -21,7 +21,7 @@ int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 
 int passoJogada(wchar_t jogadasAnteriores[100], int numJogadasAnteriores)
 {
-    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-3 && i > 0; i--)
         if  (jogadasAnteriores[i] != "PASSO") return 0; // (jogadasAnteriores[i][0] == 'P')
     
     return 1;
@@ -36,7 +36,8 @@ int tipoIgual(wchar_t jogadaAnterior[], wchar_t jogadaAtual[])
 {
     if (conjunto(jogadaAtual, wsclen(jogadaAtual)) && conjunto(jogadaAnterior, wsclen(jogadaAtual)) ||
         seq(jogadaAtual, wsclen(jogadaAtual), 1)   && seq(jogadaAnterior, wsclen(jogadaAtual), 1)   ||
-        seq(jogadaAtual, wsclen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wsclen(jogadaAtual)/2, 2)   )
+        seq(jogadaAtual, wsclen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wsclen(jogadaAtual)/2, 2)   ) return 1; // São do mesmo tipo
+        else return 0; // São de tipos diferentes 
         
 }
 
@@ -46,9 +47,12 @@ int combinacaoSuperior(wchar_t jogadasAnteriores[100], wchar_t jogadaAtual[], in
         if  (jogadasAnteriores[i] == "PASSO") continue;
         else
         {
-            if ()
+           if (maiorCarta(jogadaAtual, wcslen(jogadaAtual)) > maiorCarta(jogadasAnteriores[i], wcslen(jogadasAnteriores[i]))) {
+            return 1; // Jogada atual é superior
+           }
+            
         }
-    return 0;
+    return 0; // A jogada atual não é superior 
 
 }
 
