@@ -11,16 +11,12 @@
 // verifica se uma carta está presente na mão do jogador
 int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
-<<<<<<< HEAD
-    wcscat
-=======
     int r = 0;
     for(int j = 0; jogadaAtual[j] != 0; j++)
         for (int i = 0; maoCartas[i] != '\0'; i++)
             r += comparaCartas(jogadaAtual[j], maoCartas[i]);
 
     return (r == wcslen(jogadaAtual));
->>>>>>> 07fe0b53f803935874041d5ffab9b60d45c258bb
 }
 
 int passoJogada(wchar_t jogadasAnteriores[100], int numJogadasAnteriores)
@@ -33,7 +29,20 @@ int passoJogada(wchar_t jogadasAnteriores[100], int numJogadasAnteriores)
 
 void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
-
+    for (int i = 0; jogadaAtual[i] != '\0'; i++)
+    {
+        for (int j = 0; maoCartas[j] != '\0'; j++)
+        {
+            if (maoCartas[j] == jogadaAtual[i]) 
+            {
+                for (int k = j; maoCartas[k] != '\0'; k++)
+                {
+                    maoCartas[k] = maoCartas[k + 1];
+                }
+                break; 
+            }
+        }
+    }
 }
 
 int tipoIgual(wchar_t jogadaAnterior[], wchar_t jogadaAtual[])
@@ -51,9 +60,10 @@ int combinacaoSuperior(wchar_t jogadasAnteriores[100], wchar_t jogadaAtual[], in
         if  (jogadasAnteriores[i] == "PASSO") continue;
         else
         {
-           if (maiorCarta(jogadaAtual, wcslen(jogadaAtual)) > maiorCarta(jogadasAnteriores[i], wcslen(jogadasAnteriores[i]))) {
-            return 1; // Jogada atual é superior
-           }
+           if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadasAnteriores[i], wcslen(jogadasAnteriores[i])))) 
+            {
+                return 1; // Jogada atual é superior
+            }
             
         }
     return 0; // A jogada atual não é superior 
@@ -74,7 +84,11 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[100], wchar_t jogadaAt
                 isort(maoCartas, wsclen(maoCartas));
             }
         }
-        else if (combinacaoSuperior(jogadasAnteriores, jogadaAtual, numJogadasAnteriores))
+        else if (combinacaoSuperior(jogadasAnteriores, jogadaAtual, numJogadasAnteriores)) 
+            {
+                retirarJogada(jogadaAtual, maoCartas);
+                isort(maoCartas, wsclen(maoCartas));
+            }
 
     }
 }
