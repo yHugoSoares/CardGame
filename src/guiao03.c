@@ -4,6 +4,7 @@
 #include <math.h>
 #include <locale.h>
 #include <wchar.h>
+#include <assert.h>
 #include "functions.h"
 
 // KING VALUE (mod 16) == 14
@@ -23,19 +24,17 @@ void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
     for (int i = 0; jogadaAtual[i] != '\0'; i++)
     {
-        for (int j = 0; maoCartas[j] != '\0'; j++)
-        {
-            if (maoCartas[j] == jogadaAtual[i]) 
-            {
-                for (int k = j; maoCartas[k] != '\0'; k++)
-                {
-                    maoCartas[k] = maoCartas[k + 1];
-                }
-                break; 
-            }
-        }
+    for (int j = 0; maoCartas[j] != '\0'; j++)
+    {
+    if (maoCartas[j] == jogadaAtual[i]) 
+    {
+    for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
+    }
+    break; 
+    }
     }
 }
+
 
 // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
 int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
@@ -59,9 +58,20 @@ int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
     else return 0;
 }
 
-// escrever combinacaoValida que testa se a jogada recebida como argumento é conjunto, seq ou dupla seq
-int combinacaoValida(wchar_t jogada[])
+
+// combinacaoValida que testa se a jogada recebida como argumento é conjunto, seq ou dupla seq
+int combinacaoValida(wchar_t jogadaAtual[])
 {
+    // Verifica se é um conjunto
+    if (conjunto(jogadaAtual, wcslen(jogadaAtual)))
+        return 0;
+    // Verifica se é uma sequência
+    if (seq(jogadaAtual, wcslen(jogadaAtual), 1))
+        return 0;
+    // Verifica se é uma dupla sequência
+    if (seq(jogadaAtual, wcslen(jogadaAtual) / 2, 2))
+        return 0;
+
     return 1;
 }
 
@@ -123,10 +133,13 @@ int main()
         // print do teste atual
         wprintf(L"Teste %d\n", i+1);
 
+        // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
-        wprintf(L"%100ls\n", maoCartas);
+        for (int k = 0; maoCartas[k] != '\0' ; k++) wprintf(L"%100ls ", maoCartas);
 
-        // escrever for loop que imprime a mao com espaços
+        //proximo teste
+        printf("\n");
+        
     }
     
     return 0;
