@@ -50,9 +50,9 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
 
 int tipoIgual(wchar_t jogadaAnterior[], wchar_t jogadaAtual[])
 {
-    if (conjunto(jogadaAtual, wsclen(jogadaAtual)) && conjunto(jogadaAnterior, wsclen(jogadaAtual)) ||
-        seq(jogadaAtual, wsclen(jogadaAtual), 1)   && seq(jogadaAnterior, wsclen(jogadaAtual), 1)   ||
-        seq(jogadaAtual, wsclen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wsclen(jogadaAtual)/2, 2)   ) return 1; // São do mesmo tipo
+    if (conjunto(jogadaAtual, wcslen(jogadaAtual)) && conjunto(jogadaAnterior, wcslen(jogadaAtual)) ||
+        seq(jogadaAtual, wcslen(jogadaAtual), 1)   && seq(jogadaAnterior, wcslen(jogadaAtual), 1)   ||
+        seq(jogadaAtual, wcslen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wcslen(jogadaAtual)/2, 2)   ) return 1; // São do mesmo tipo
         else return 0; // São de tipos diferentes 
         
 }
@@ -77,12 +77,12 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[100], wchar_t jogadaAt
     {
         if(numJogadasAnteriores == 0 || passoJogada(jogadasAnteriores, numJogadasAnteriores))
         {
-            if (conjunto(jogadaAtual, wsclen(jogadaAtual)) ||
-                seq(jogadaAtual, wsclen(jogadaAtual), 1)   ||
-                seq(jogadaAtual, wsclen(jogadaAtual)/2, 2)   )
+            if (conjunto(jogadaAtual, wcslen(jogadaAtual)) ||
+                seq(jogadaAtual, wcslen(jogadaAtual), 1)   ||
+                seq(jogadaAtual, wcslen(jogadaAtual)/2, 2)   )
             {
-                retirarJogada(jogadaAtual, maoCartas);
-                isort(maoCartas, wsclen(maoCartas));
+                retirarJogada(jogadaAtual, maoCartas, jogadasAnteriores, numJogadasAnteriores);
+                isort(maoCartas, wcslen(maoCartas));
             }
         }
         else if (combinacaoSuperior(jogadasAnteriores, jogadaAtual, numJogadasAnteriores));
