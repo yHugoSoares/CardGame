@@ -12,7 +12,7 @@
 // verifica se uma carta está presente na mão do jogador
 int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
-    int r = 0;
+    long unsigned int r = 0;
     for(int j = 0; jogadaAtual[j] != 0; j++)
         for (int i = 0; maoCartas[i] != '\0'; i++)
             r += comparaCartas(jogadaAtual[j], maoCartas[i]);
@@ -24,14 +24,14 @@ void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
     for (int i = 0; jogadaAtual[i] != '\0'; i++)
     {
-    for (int j = 0; maoCartas[j] != '\0'; j++)
-    {
-    if (maoCartas[j] == jogadaAtual[i]) 
-    {
-    for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
-    }
-    break; 
-    }
+        for (int j = 0; maoCartas[j] != '\0'; j++)
+        {
+            if (maoCartas[j] == jogadaAtual[i]) 
+            {
+                for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
+            }
+            break; 
+        }
     }
 }
 
@@ -43,15 +43,15 @@ int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
     int tamanhoIgual = 0;
     int valorSuperior = 0;
 
-    if ( (conjunto(jogadaAtual, wsclen(jogadaAtual)) && conjunto(jogadaAnterior, wsclen(jogadaAtual))) ||
-         (seq(jogadaAtual, wsclen(jogadaAtual), 1)   && seq(jogadaAnterior, wsclen(jogadaAtual), 1))   ||
-         (seq(jogadaAtual, wsclen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wsclen(jogadaAtual)/2, 2))    )
+    if ( (conjunto(jogadaAtual, wcslen(jogadaAtual)) && conjunto(jogadaAnterior, wcslen(jogadaAtual))) ||
+         (seq(jogadaAtual, wcslen(jogadaAtual), 1)   && seq(jogadaAnterior, wcslen(jogadaAtual), 1))   ||
+         (seq(jogadaAtual, wcslen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wcslen(jogadaAtual)/2, 2))    )
             tipoIgual = 1;
 
-    if (wsclen(jogadaAtual) == wsclen(jogadaAnterior))
+    if (wcslen(jogadaAtual) == wcslen(jogadaAnterior))
             tamanhoIgual = 1;
 
-    if (comparaCartas(maiorCarta(jogadaAtual, wsclen(jogadaAtual)), maiorCarta(jogadaAnterior, wsclen(jogadaAnterior))))
+    if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadaAnterior, wcslen(jogadaAnterior))))
             valorSuperior = 1;
 
     if (tipoIgual && tamanhoIgual && valorSuperior) return 1;
@@ -95,7 +95,7 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
     if (pertenceMao(jogadaAtual, maoCartas) && jogadaValida(jogadasAnteriores, numJogadasAnteriores, jogadaAtual))
     {
         retirarJogada(jogadaAtual, maoCartas);
-        isort(maoCartas, wsclen(maoCartas));
+        isort(maoCartas, wcslen(maoCartas));
     }
 }
 
