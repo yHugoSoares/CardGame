@@ -21,84 +21,17 @@ int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 
 }
 
-void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
+void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[], wchar_t jogadasAnteriores, int numJogadasAnteriores)
 {
-<<<<<<< HEAD
     int resultado = 0;
     for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
         if  (jogadasAnteriores[i] == "PASSO") resultado++;// (jogadasAnteriores[i][0] == 'P')
-=======
-    for (int i = 0; jogadaAtual[i] != '\0'; i++)
-    {
-        for (int j = 0; maoCartas[j] != '\0'; j++)
-        {
-            if (maoCartas[j] == jogadaAtual[i]) 
-            {
-                for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
-            }
-            break; 
-        }
-    }
-}
-
-
-// verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
-int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
-{
-    int tipoIgual = 0;
-    int tamanhoIgual = 0;
-    int valorSuperior = 0;
-
-    if ( (conjunto(jogadaAtual, wcslen(jogadaAtual)) && conjunto(jogadaAnterior, wcslen(jogadaAtual))) ||
-         (seq(jogadaAtual, wcslen(jogadaAtual), 1)   && seq(jogadaAnterior, wcslen(jogadaAtual), 1))   ||
-         (seq(jogadaAtual, wcslen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wcslen(jogadaAtual)/2, 2))    )
-            tipoIgual = 1;
-
-    if (wcslen(jogadaAtual) == wcslen(jogadaAnterior))
-            tamanhoIgual = 1;
-
-    if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadaAnterior, wcslen(jogadaAnterior))))
-            valorSuperior = 1;
-
-    if (tipoIgual && tamanhoIgual && valorSuperior) return 1;
-    else return 0;
-}
-
-
-// combinacaoValida que testa se a jogada recebida como argumento é conjunto, seq ou dupla seq
-int combinacaoValida(wchar_t jogadaAtual[])
-{
-    // Verifica se é um conjunto
-    if (conjunto(jogadaAtual, wcslen(jogadaAtual)))
-        return 0;
-    // Verifica se é uma sequência
-    if (seq(jogadaAtual, wcslen(jogadaAtual), 1))
-        return 0;
-    // Verifica se é uma dupla sequência
-    if (seq(jogadaAtual, wcslen(jogadaAtual) / 2, 2))
-        return 0;
-
-    return 1;
-}
-
-
-int jogadaValida(wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
-{
-    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
-        // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
-        if  (jogadasAnteriores[i][0] == 'P' && combinacaoValida(jogadaAtual)) continue;
-        // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
-        else if (jogadaSuperior(jogadaAtual, jogadasAnteriores[i])) break;
-        // se nenhuma das anteriores se verificar a jogada não é válida
-        else return 0;
->>>>>>> 604c505cfd0c9e40a071791650ec86a1dc11478c
     
     return resultado;
 }
 
 void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
 {
-<<<<<<< HEAD
     for (int i = 0; jogadaAtual[i] != '\0'; i++)
     {
         for (int j = 0; maoCartas[j] != '\0'; j++)
@@ -154,13 +87,6 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[100], wchar_t jogadaAt
         }
         else if (combinacaoSuperior(jogadasAnteriores, jogadaAtual, numJogadasAnteriores));
 
-=======
-    // Verifica se as cartas jogadas pertencem à mão do jogador e são uma jogada válida
-    if (pertenceMao(jogadaAtual, maoCartas) && jogadaValida(jogadasAnteriores, numJogadasAnteriores, jogadaAtual))
-    {
-        retirarJogada(jogadaAtual, maoCartas);
-        isort(maoCartas, wcslen(maoCartas));
->>>>>>> 604c505cfd0c9e40a071791650ec86a1dc11478c
     }
 }
 
