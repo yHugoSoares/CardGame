@@ -8,14 +8,6 @@
 
 // KING VALUE (mod 16) == 14
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <locale.h>
-#include <wchar.h>
-
 wchar_t maiorCarta(wchar_t cartas[], int numCartas) // encontra a maior carta
 {
     wchar_t atualMaiorCarta = cartas[0];
