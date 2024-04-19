@@ -238,19 +238,23 @@ int pertenceMao(wchar_t jogadaAtual[], wchar_t maoCartas[])
 
 void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
 {
-    for (int i = 0; jogadaAtual[i] != '\0'; i++)
+    wchar_t temp[wcslen(maoCartas)];
+    int k = 0;
+    for(long unsigned int i = 0; i < wcslen(maoCartas); i++)
     {
-        for (int j = 0; maoCartas[j] != '\0'; j++)
+        for (long unsigned int j = 0; j < wcslen(jogadaAtual); j++)
         {
-            if (maoCartas[j] == jogadaAtual[i])
+            int naoEJogado = 1;
+            if (maoCartas[j] == jogadaAtual[i]) naoEJogado = 0;
+            if (naoEJogado)
             {
-                for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
+                temp[k] = maoCartas[j];
+                k++;            
             }
-            break; 
         }
     }
+    for(long unsigned int i = 0; i < wcslen(maoCartas); i++) maoCartas[i] = temp[i];
 }
-
 
 // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
 int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
@@ -311,7 +315,7 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
     if (pertenceMao(jogadaAtual, maoCartas) && jogadaValida(jogadasAnteriores, numJogadasAnteriores, jogadaAtual))
     {
         isort(maoCartas, wcslen(maoCartas));
-        retirarJogada(jogadaAtual, maoCartas);
+        retirarJogada(maoCartas, jogadaAtual);
     }
 }
 
@@ -360,9 +364,10 @@ int main()
 
         // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
-        wprintf(L"%100ls\n", maoCartas);
         escrevecarta(maoCartas, wcslen(maoCartas));
         //proximo teste
+        retirarJogada(maoCartas, jogadaAtual);
+        escrevecarta(maoCartas, wcslen(maoCartas));
         
     }
     
