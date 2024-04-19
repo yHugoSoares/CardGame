@@ -360,12 +360,9 @@ int main()
 
         // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
-<<<<<<< HEAD
         wprintf(L"%100ls\n", maoCartas);
-=======
         escrevecarta(maoCartas, wcslen(maoCartas));
         //proximo teste
->>>>>>> dc1066f9fbfe457050a3cc409e54d93e3fe98831
         
     }
     
