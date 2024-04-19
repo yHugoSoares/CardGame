@@ -221,7 +221,7 @@ void isort(wchar_t cartas[], int numCartas) // implementação do insertion sort
 void ordena(wchar_t cartas[][100], int linhas, int numCartas) // ordena as sequências e as cartas das sequências por ordem crescente
 {
     for (int i = 0; i < linhas; i++)
-         isort(cartas[i], numCartas);
+        isort(cartas[i], numCartas);
     bsort(cartas, linhas, numCartas);
 }
 
@@ -242,7 +242,7 @@ void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
     {
         for (int j = 0; maoCartas[j] != '\0'; j++)
         {
-            if (maoCartas[j] == jogadaAtual[i]) 
+            if (maoCartas[j] == jogadaAtual[i])
             {
                 for (int k = j; maoCartas[k] != '\0'; k++) maoCartas[k] = maoCartas[k + 1];
             }
@@ -315,6 +315,15 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
     }
 }
 
+void escrevecarta(wchar_t maoCartas[], int numCartas) // escreve as cartas com espacos entre elas
+{
+    for (int i = 0; i < numCartas; i++)
+    {
+        wprintf(L"%lc ", maoCartas[i]);
+    }
+    wprintf(L"\n");
+}
+
 
 int main()
 {
@@ -351,7 +360,12 @@ int main()
 
         // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
+<<<<<<< HEAD
         wprintf(L"%100ls\n", maoCartas);
+=======
+        escrevecarta(maoCartas, wcslen(maoCartas));
+        //proximo teste
+>>>>>>> dc1066f9fbfe457050a3cc409e54d93e3fe98831
         
     }
     
