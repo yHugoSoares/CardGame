@@ -310,8 +310,8 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
     // Verifica se as cartas jogadas pertencem à mão do jogador e são uma jogada válida
     if (pertenceMao(jogadaAtual, maoCartas) && jogadaValida(jogadasAnteriores, numJogadasAnteriores, jogadaAtual))
     {
-        retirarJogada(jogadaAtual, maoCartas);
         isort(maoCartas, wcslen(maoCartas));
+        retirarJogada(jogadaAtual, maoCartas);
     }
 }
 
@@ -351,10 +351,7 @@ int main()
 
         // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
-        for (int k = 0; maoCartas[k] != '\0' ; k++) wprintf(L"%100ls ", maoCartas);
-
-        //proximo teste
-        printf("\n");
+        wprintf(L"%100ls\n", maoCartas);
         
     }
     
