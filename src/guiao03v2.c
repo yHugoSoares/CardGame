@@ -248,8 +248,7 @@ void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
             if (maoCartas[j] == jogadaAtual[i]) naoEJogado = 0;
             if (naoEJogado)
             {
-                temp[k] = maoCartas[j];
-                k++;            
+                temp[k++] = maoCartas[j];            
             }
         }
     }
