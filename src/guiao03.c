@@ -99,6 +99,14 @@ void teste(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadas
     }
 }
 
+void escrevecarta(wchar_t maoCartas[], int numCartas) // escreve as cartas com espacos entre elas
+{
+    for (int i = 0; i < numCartas; i++)
+    {
+        wprintf(L"%lc ", maoCartas[i]);
+    }
+    wprintf(L"\n");
+}
 
 int main()
 {
@@ -135,7 +143,7 @@ int main()
 
         // loop que imprime a mao com espaços
         teste(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
-        for (int k = 0; maoCartas[k] != '\0' ; k++) wprintf(L"%100ls ", maoCartas);
+        escrevecarta(maoCartas, wcslen(maoCartas));
 
         //proximo teste
         printf("\n");
