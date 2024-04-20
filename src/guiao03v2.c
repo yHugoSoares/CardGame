@@ -145,17 +145,20 @@ void retirarJogada(wchar_t jogadaAtual[], wchar_t maoCartas[])
 
     for(int i = 0; i < tamanhoMao; i++)
     {
+        int naoEJogado = 1;
         for (int j = 0; j < tamanhoJogada; j++)
+            if (maoCartas[i] == jogadaAtual[j])
+                naoEJogado = 0;
+        
+        if (naoEJogado)
         {
-            if (maoCartas[i] != jogadaAtual[j])
-            {
-                temp[tempIndex] = maoCartas[i];
-                tempIndex++;
-            }
+            temp[tempIndex] = maoCartas[i];
+            tempIndex++;
         }
-        temp[tempIndex] = '\0';
     }
-    wcscpy(maoCartas, temp);
+
+    for(int i = 0; i < tempIndex; i++)
+        maoCartas[i] = temp[i];
 }
 
 int casosEspeciais(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
@@ -169,13 +172,13 @@ int casosEspeciais(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
     
     if (tudoReis)
     {
-        if (tamanhoAnterior == 1 && conjunto(jogadaAtual, tamanhoJogada) && tamanhoJogada == 4)
+        if (tamanhoAnterior == 1 && conjunto(jogadaAtual, tamanhoJogada) && tamanhoJogada >= 4)
             return 1;
-        else if (tamanhoAnterior == 1 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 3)
+        else if (tamanhoAnterior == 1 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 >= 3)
             return 1;
-        else if (tamanhoAnterior == 2 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 4)
+        else if (tamanhoAnterior == 2 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 >= 4)
             return 1;
-        else if (tamanhoAnterior == 3 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 5)
+        else if (tamanhoAnterior == 3 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 >= 5)
             return 1;
     }
 
@@ -223,12 +226,12 @@ int combinacaoValida(wchar_t jogadaAtual[])
 }
 
 // verifica se a jogada é válida
-int jogadaValida(wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
-{
+int jogadaValida(wchar_t jogadasAnteriores[][1000], int numJogadasAnteriores, wchar_t jogadaAtual[])
+{    
     if (numJogadasAnteriores == 0)
         return combinacaoValida(jogadaAtual);
 
-    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i >= 0; i--)
     {
         // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
         if  (jogadasAnteriores[i][0] == 'P' && combinacaoValida(jogadaAtual))
@@ -244,8 +247,9 @@ int jogadaValida(wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wch
 }
 
 // verifica se a jogada é válida e modifica a mão do jogador
-int aplicaJogada(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
+int aplicaJogada(wchar_t maoCartas[], wchar_t jogadasAnteriores[][1000], int numJogadasAnteriores, wchar_t jogadaAtual[])
 {
+
     // verifica se as cartas jogadas pertencem à mão do jogador e são uma jogada válida
     if (pertenceMao(jogadaAtual, maoCartas) && jogadaValida(jogadasAnteriores, numJogadasAnteriores, jogadaAtual))
     {
@@ -260,13 +264,12 @@ int aplicaJogada(wchar_t maoCartas[], wchar_t jogadasAnteriores[][100], int numJ
 void imprimeMao(wchar_t maoCartas[], int tamanhoMao)
 {
     if (tamanhoMao == 0) wprintf(L"\n");
-    else 
-        for(int i = 0; i < tamanhoMao; i++)
-        {
-            if (i == tamanhoMao - 1)
-                wprintf(L"%lc\n", maoCartas[i]);
-            else wprintf(L"%lc ", maoCartas[i]);
-        }
+    else for(int i = 0; i < tamanhoMao; i++)
+         {
+             if (i == tamanhoMao - 1)
+                 wprintf(L"%lc\n", maoCartas[i]);
+             else wprintf(L"%lc ", maoCartas[i]);
+         }
 }
 
 int main()
@@ -274,8 +277,8 @@ int main()
     setlocale(LC_CTYPE, "C.UTF-8");
     
     int testes, numJogadasAnteriores;
-    wchar_t jogadaAtual[100];
-    wchar_t maoCartas[100];
+    wchar_t jogadaAtual[1000];
+    wchar_t maoCartas[1000];
 
     // lê o número de testes que vão ser lidos
     assert(wscanf(L"%d", &testes) == 1);
@@ -287,17 +290,27 @@ int main()
         assert(wscanf(L"%d", &numJogadasAnteriores) == 1);
 
         // array de jogadas passadas
-        wchar_t jogadasAnteriores[numJogadasAnteriores][100];
+        wchar_t jogadasAnteriores[numJogadasAnteriores][1000];
 
         // lê e guarda as cartas do jogador
-        assert(wscanf(L"%100ls", maoCartas) != 0);
+        assert(wscanf(L"%1000ls", maoCartas) != 0);
+        int tamanhoMao = wcslen(maoCartas);
         
         // lê e guarda as jogadas anteriores (linha a linha)
         for (int j = 0; j < numJogadasAnteriores; j++)
-            assert(wscanf(L"%100ls", &jogadasAnteriores[j][0]) != 0);
+            assert(wscanf(L"%1000ls", &jogadasAnteriores[j][0]) != 0);
         
         // lê e guarda a jogada atual do jogador
-        assert(wscanf(L"%100ls", jogadaAtual) != 0);
+        assert(wscanf(L"%1000ls", jogadaAtual) != 0);
+
+        wprintf(L"Teste %d\n", i+1);
+
+        if (jogadaAtual[0] == 'P')
+        {
+            isort(maoCartas, tamanhoMao);
+            imprimeMao(maoCartas, tamanhoMao);
+            continue;
+        }
 
         // print do teste atual
         wprintf(L"Teste %d\n", i+1);
@@ -306,7 +319,6 @@ int main()
         int jogadaAplicada = aplicaJogada(maoCartas, jogadasAnteriores, numJogadasAnteriores, jogadaAtual);
         
         // determina o número de cartas na mão do jogador depois da jogada
-        int tamanhoMao = wcslen(maoCartas);
         if (jogadaAplicada) tamanhoMao -= wcslen(jogadaAtual);
 
         // ordena as cartas
