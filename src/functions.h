@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
 wchar_t maiorCarta(wchar_t cartas[], int numCartas); // encontra a maior carta
 
 int conjunto(wchar_t cartas[], int numCartas); // verifica se é um conjunto
@@ -8,8 +11,7 @@ int checkImagem(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual);
 
 int seq(wchar_t cartas[], int numCartas, int mult2); // verifica se é uma sequência
 
-// verifica se todas as sequências são do mesmo tipo (conjunto, sequência ou dupla sequência)
-int combinacoesIguais(wchar_t cartas[][100], int linhas);
+int combinacoesIguais(wchar_t cartas[][100], int linhas); // verifica se todas as sequências são do mesmo tipo (conjunto, sequência ou dupla sequência)
 
 void printCartas(wchar_t cartas[][100], int linhas, int numCartas); // funcao que da print das cartas
 
@@ -24,3 +26,5 @@ void bsort(wchar_t cartas[][100], int linhas, int numCartas); // implementação
 void isort(wchar_t cartas[], int numCartas); // implementação do insertion sort para ordenar as cartas de uma sequência
 
 void ordena(wchar_t cartas[][100], int linhas, int numCartas); // ordena as sequências e as cartas das sequências por ordem crescente
+
+#endif

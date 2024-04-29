@@ -4,6 +4,7 @@
 #include <math.h>
 #include <locale.h>
 #include <wchar.h>
+#include <stdarg.h>
 
 wchar_t maiorCarta(wchar_t cartas[], int numCartas) // encontra a maior carta
 {
