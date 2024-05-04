@@ -186,8 +186,36 @@ int fatorial(int n)
 }
 
 
+void troca_char(wchar_t *str, int p1, int p2)
+{
+  wchar_t tmp;
+  tmp = str[p1]; 
+  str[p1] = str[p2]; 
+  str[p2] = tmp;
+}
 
+void permutacao_recursiva(wchar_t *str, int k)
+{
+  int i, len;
+  len = wcslen(str);
 
+  if (k == len) 
+    wprintf(L"%ls\n", str);
+  else 
+  {
+    for (i = k; i < len; i++) 
+    {
+      troca_char(str, k, i);
+      permutacao_recursiva(str, k + 1);
+      troca_char(str, i, k);
+    }
+  }
+}
+
+void lista_permutacoes(wchar_t *str)
+{
+  permutacao_recursiva(str, 0);
+}
 
 
 
@@ -198,42 +226,86 @@ int calculaJogadasPossiveis(jogadaAnterior,maoCartas){
     wchar_t CombinacoesPossiveis[combinacoesPossiveis][100];
 
     
-
-
-    return 0;
 }
 
+void printArray(wchar_t arr[], int tamanho) {
+    wprintf(L"{");
+    for (int i = 0; i < tamanho; i++) {
+        wprintf(L"%lc ", arr[i]);
+    }
+    wprintf(L"}\n");
+}
 
-int main()
-{
-    setlocale(LC_CTYPE, "C.UTF-8");
-    
-    int testes;
-    wchar_t jogadaAnterior[1000];
-    wchar_t maoCartas[1000];
+void swap2(wchar_t *a, wchar_t *b) {
+    wchar_t temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-    // lê o número de testes que vão ser lidos
-    assert(wscanf(L"%d", &testes) == 1);
-
-    // itera para cada teste
-    for (int i = 0; i < testes; i++)
-    {
-        // lê e guarda a jogada anterior
-        assert(wscanf(L"%1000ls", jogadaAnterior) != 0);
-
-        // lê e guarda a mao do jogador 
-        assert(wscanf(L"%1000ls", maoCartas) != 0);
-    
- 
-     // print do teste atual
-        wprintf(L"Teste %d\n", i+1);
-
-        calculaJogadasPossiveis(jogadaAnterior,maoCartas);
-    
-        wprintf(L"%d\n", i+1);
+void permutate(wchar_t cartas[], int inicio, int tamanho) {
+    if (inicio == tamanho - 1) {
+        printArray(cartas, tamanho);
+        return;
     }
     
+    for (int i = inicio; i < tamanho; i++) {
+        swap2(&cartas[inicio], &cartas[i]);
+        permutate(cartas, inicio + 1, tamanho);
+        swap2(&cartas[inicio], &cartas[i]);
+    }
+}
+
+void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index) {
+    if (index == tamanho) {
+        permutate(subset, 0, tamanho);
+        return;
+    }
+    subset[index] = 0;
+    generateSubsets(cartas, subset, tamanho, index + 1);
+    subset[index] = cartas[index];
+    generateSubsets(cartas, subset, tamanho, index + 1);
+}
+
+int main() {
+    setlocale(LC_CTYPE, "C.UTF-8");
+    wchar_t cartas[] = { L'🂼', L'🂢', L'🃊' };
+    int tamanho = sizeof(cartas) / sizeof(cartas[0]);
+    wchar_t subset[tamanho];
+    generateSubsets(cartas, subset, tamanho, 0);
     return 0;
 }
 
+
+//int main()
+//{
+//    setlocale(LC_CTYPE, "C.UTF-8");
+//    
+//    int testes;
+//    wchar_t jogadaAnterior[1000];
+//    wchar_t maoCartas[1000];
+//
+//    // lê o número de testes que vão ser lidos
+//    assert(wscanf(L"%d", &testes) == 1);
+//
+//    // itera para cada teste
+//    for (int i = 0; i < testes; i++)
+//    {
+//        // lê e guarda a jogada anterior
+//        assert(wscanf(L"%1000ls", jogadaAnterior) != 0);
+//
+//        // lê e guarda a mao do jogador 
+//        assert(wscanf(L"%1000ls", maoCartas) != 0);
+//    
+// 
+//    //  print do teste atual
+//        wprintf(L"Teste %d\n", i+1);
+//
+//        calculaJogadasPossiveis(jogadaAnterior,maoCartas);
+//    
+//        wprintf(L"%d\n", i+1);
+//    }
+//    
+//    return 0;
+//}
+//
   
