@@ -1,15 +1,22 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror -lm -pedantic
 
+#aqui metes o binario
+TARGET = guiao04
+#aqui metes todos os .c
+SRCS = src/guiao04.c src/functions.c
+OBJS = $(SRCS:.c=.o)
 
-# %: ./src/%.c
-# 	$(CC) -o ./bin/$@ $^ $(CFLAGS)
+# Regras
+all: $(TARGET)
 
-guiao04: main.o inc.o
-    gcc -o ./bin/guiao04 guiao04.o functions.o $(CFLAGS)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o ./bin/$@ $^
 
-guiao04.o: guiao04.c functions.h
-    gcc -c main.c $(CFLAGS)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-functions.o: functions.c functions.h 
-    gcc -c inc.c $(CFLAGS)
+
+# Limpeza de arquivos temporários
+clean:
+	rm -f $(OBJS) $(TARGET)
