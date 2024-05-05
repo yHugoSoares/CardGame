@@ -59,15 +59,14 @@ int jogadaValida(wchar_t jogadaAnteriores[100], int numJogadasAnteriores, wchar_
 }
 
 void printArray(wchar_t arr[], int tamanho) 
-{  
-  wprintf(L"{");
+{
 
   for (int i = 0; i < tamanho; i++) 
   {
     if ((i + 1) == tamanho && arr[i] != '\0') wprintf(L"%lc", arr[i]);
     else if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
   }
-  wprintf(L"}\n");
+  wprintf(L"\n");
 }
 
 void swap2(wchar_t *a, wchar_t *b) 
@@ -113,7 +112,7 @@ int main() {
   setlocale(LC_CTYPE, "C.UTF-8");
 
   int numTestes = 0;
-  wchar_t cartas[] = L"🂼🂢🃊", jogadaAnterior[100];
+  wchar_t cartas[] = L"🂠", jogadaAnterior[] = L"🂠"; // 🃌     🃜🂬🂼
 
   assert(wscanf(L"%d", &numTestes) == 1);
   for (int i = 0; i < numTestes; i++)
@@ -123,7 +122,8 @@ int main() {
     int tamanho = sizeof(cartas) / sizeof(cartas[0]);
   
     wchar_t subset[tamanho];
-    
+
+    wprintf(L"Teste %d\n", i+1);
     generateSubsets(cartas, subset, tamanho, 0, jogadaAnterior);
   }
   return 0;  
