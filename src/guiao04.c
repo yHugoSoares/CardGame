@@ -20,10 +20,10 @@ int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
             tipoIgual = 1;
 
     if (wcslen(jogadaAtual) == wcslen(jogadaAnterior))
-            tamanhoIgual = 1;
+      tamanhoIgual = 1;
 
     if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadaAnterior, wcslen(jogadaAnterior))))
-            valorSuperior = 1;
+      valorSuperior = 1;
 
     if (tipoIgual && tamanhoIgual && valorSuperior) return 1;
     else return 0;
@@ -45,28 +45,39 @@ int combinacaoValida(wchar_t jogadaAtual[])
     return 1;
 }
 
-int jogadaValida(wchar_t jogadaAnteriores[100], int numJogadasAnteriores, wchar_t jogadaAtual[])
+int jogadaValida(wchar_t jogadaAnterior[100], int numJogadasAnteriores, wchar_t jogadaAtual[])
 {
-    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
-        // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
-        if  (jogadaAnteriores[0] == 'P' && combinacaoValida(jogadaAtual)) continue;
-        // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
-        else if (jogadaSuperior(jogadaAtual, jogadaAnteriores)) break;
-        // se nenhuma das anteriores se verificar a jogada não é válida
-        else return 0;
+  for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+    // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
+    if  (jogadaAnterior[0] == 'P' && combinacaoValida(jogadaAtual)) continue;
+    // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
+    else if (jogadaSuperior(jogadaAtual, jogadaAnterior)) break;
+    // se nenhuma das anteriores se verificar a jogada não é válida
+    else return 0;
     
-    return 1;
+  return 1;
+}
+
+int emptyArray(wchar_t arr[], int tamanho)
+{
+  for (int i = 0; i < tamanho; i++)
+  {
+    if (arr[i] != '\0') return 0;
+  }
+  return 1;
 }
 
 void printArray(wchar_t arr[], int tamanho) 
 {
-
-  for (int i = 0; i < tamanho; i++) 
+  if (!emptyArray(arr, tamanho))
   {
-    if ((i + 1) == tamanho && arr[i] != '\0') wprintf(L"%lc", arr[i]);
-    else if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
+    for (int i = 0; i < tamanho; i++) 
+    {
+      if ((i + 1) == tamanho && arr[i] != '\0') wprintf(L"%lc", arr[i]);
+      else if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
+    }
+    wprintf(L"\n");
   }
-  wprintf(L"\n");
 }
 
 void swap2(wchar_t *a, wchar_t *b) 
@@ -110,7 +121,8 @@ void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index,
   generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
 }
 
-int main() {
+int main() 
+{
   setlocale(LC_CTYPE, "C.UTF-8");
 
   int numTestes = 0;
