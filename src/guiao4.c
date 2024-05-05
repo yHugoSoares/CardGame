@@ -228,12 +228,16 @@ int calculaJogadasPossiveis(jogadaAnterior,maoCartas){
     
 }
 
-void printArray(wchar_t arr[], int tamanho) {
-    wprintf(L"{");
-    for (int i = 0; i < tamanho; i++) {
-        wprintf(L"%lc ", arr[i]);
-    }
-    wprintf(L"}\n");
+void printArray(wchar_t arr[], int tamanho) 
+{
+  wprintf(L"{");
+
+  for (int i = 0; i < tamanho; i++) 
+  {
+    if ((i + 1) == tamanho && arr[i] != '\0') wprintf(L"%lc", arr[i]);
+    else if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
+  }
+  wprintf(L"}\n");
 }
 
 void swap2(wchar_t *a, wchar_t *b) {
