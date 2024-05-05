@@ -4,17 +4,17 @@ CFLAGS=-Wall -Wextra -Werror -lm -pedantic
 #aqui metes o binario
 TARGET = guiao04
 #aqui metes todos os .c
-SRCS = ./src/guiao04.c ./src/functions.c
+SRCS = src/guiao04.c src/functions.c
 OBJS = $(SRCS:.c=.o)
 
 # Regras
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -o ./bin/$@ $^ $(CFLAGS)
+	$(CC) $(CFLAGS) -o ./bin/$@ $^
 
 %.o: %.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 
 # Limpeza de arquivos temporários

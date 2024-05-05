@@ -48,13 +48,14 @@ int combinacaoValida(wchar_t jogadaAtual[])
 int jogadaValida(wchar_t jogadaAnterior[100], int numJogadasAnteriores, wchar_t jogadaAtual[])
 {
   for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+  {
     // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
     if  (jogadaAnterior[0] == 'P' && combinacaoValida(jogadaAtual)) continue;
     // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
     else if (jogadaSuperior(jogadaAtual, jogadaAnterior)) break;
     // se nenhuma das anteriores se verificar a jogada não é válida
     else return 0;
-    
+  }
   return 1;
 }
 
