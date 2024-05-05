@@ -45,13 +45,13 @@ int combinacaoValida(wchar_t jogadaAtual[])
     return 1;
 }
 
-int jogadaValida(wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
+int jogadaValida(wchar_t jogadaAnteriores[100], int numJogadasAnteriores, wchar_t jogadaAtual[])
 {
     for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
         // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
-        if  (jogadasAnteriores[i][0] == 'P' && combinacaoValida(jogadaAtual)) continue;
+        if  (jogadaAnteriores[0] == 'P' && combinacaoValida(jogadaAtual)) continue;
         // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
-        else if (jogadaSuperior(jogadaAtual, jogadasAnteriores[i])) break;
+        else if (jogadaSuperior(jogadaAtual, jogadaAnteriores)) break;
         // se nenhuma das anteriores se verificar a jogada não é válida
         else return 0;
     
@@ -77,31 +77,36 @@ void swap2(wchar_t *a, wchar_t *b)
   *b = temp;
 }
 
-void permutate(wchar_t cartas[], int inicio, int tamanho) {
+void permutate(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior[]) 
+{
   if (inicio == tamanho - 1) 
   {
-    printArray(cartas, tamanho);
-    return;
+    if (jogadaValida(jogadaAnterior, 1, cartas))
+    {
+      printArray(cartas, tamanho);
+      return;
+    }
   }
   
   for (int i = inicio; i < tamanho; i++) 
   {
     swap2(&cartas[inicio], &cartas[i]);
-    permutate(cartas, inicio + 1, tamanho);
+    permutate(cartas, inicio + 1, tamanho, jogadaAnterior);
     swap2(&cartas[inicio], &cartas[i]);
   }
 }
 
-void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index) {
+void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index, wchar_t jogadaAnterior[]) 
+{
   if (index == tamanho) 
   {
-    permutate(subset, 0, tamanho);
+    permutate(subset, 0, tamanho, jogadaAnterior);
     return;
   }
   subset[index] = 0;
-  generateSubsets(cartas, subset, tamanho, index + 1);
+  generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
   subset[index] = cartas[index];
-  generateSubsets(cartas, subset, tamanho, index + 1);
+  generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
 }
 
 int main() {
@@ -119,7 +124,7 @@ int main() {
   
     wchar_t subset[tamanho];
     
-    generateSubsets(cartas, subset, tamanho, 0);
+    generateSubsets(cartas, subset, tamanho, 0, jogadaAnterior);
   }
   return 0;  
 }
