@@ -84,14 +84,16 @@ void permutate(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior
     {
       printArray(cartas, tamanho);
       return;
-    }
+    } 
   }
-  
-  for (int i = inicio; i < tamanho; i++) 
+  else
   {
-    swap2(&cartas[inicio], &cartas[i]);
-    permutate(cartas, inicio + 1, tamanho, jogadaAnterior);
-    swap2(&cartas[inicio], &cartas[i]);
+    for (int i = inicio; i < tamanho; i++) 
+    {
+      swap2(&cartas[inicio], &cartas[i]);
+      permutate(cartas, inicio + 1, tamanho, jogadaAnterior);
+      swap2(&cartas[inicio], &cartas[i]);
+    }
   }
 }
 
