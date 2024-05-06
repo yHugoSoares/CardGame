@@ -5,6 +5,7 @@
 #include <locale.h>
 #include <wchar.h>
 #include <assert.h>
+#include <ctype.h>
 #include "functions.h"
 
 // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
@@ -56,11 +57,25 @@ int jogadaValida(wchar_t jogadaAnterior[100], wchar_t jogadaAtual[])
     else return 0;
 }
 
+void retiraEspacos(wchar_t arr[])
+{
+  int len = wcslen(arr), k = 0;
+  wchar_t temp[len];
+  for (int i = 0; i < len; i++)
+  {
+    if (arr[i] != L'0') temp[k++] = arr[i];
+  }
+  for (int i = 0; i < len; i++)
+  {
+    arr[i] = temp[i];
+  }
+}
+
 int emptyArray(wchar_t arr[], int tamanho)
 {
   for (int i = 0; i < tamanho; i++)
   {
-    if (arr[i] != '\0') return 0;
+    if (arr[i] != '\0' || arr[i] != L' ') return 0;
   }
   return 1;
 }
@@ -68,12 +83,12 @@ int emptyArray(wchar_t arr[], int tamanho)
 void printArray(wchar_t arr[]) 
 {
   int len = wcslen(arr);
+  retiraEspacos(arr);
   if (!emptyArray(arr, len))
   {
     for (int i = 0; i < len; i++) 
     {
-      if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
-     
+      if (arr[i] != '\0' || arr[i] != L'0') wprintf(L"%lc ", arr[i]);
     }
     wprintf(L"\n");
   }
@@ -86,10 +101,12 @@ void swap2(wchar_t *a, wchar_t *b)
   *b = temp;
 }
 
-void permutate(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior[]) 
+void permute(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior[]) 
 {
   if (inicio == tamanho - 1) 
   {
+    cartas[tamanho] = '\0';
+    // if (jogadaValida(jogadaAnterior, cartas)) printArray(cartas);
     printArray(cartas);
     return;
   }
@@ -98,7 +115,7 @@ void permutate(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior
     for (int i = inicio; i < tamanho; i++) 
     {
       swap2(&cartas[inicio], &cartas[i]);
-      permutate(cartas, inicio + 1, tamanho, jogadaAnterior);
+      permute(cartas, inicio + 1, tamanho, jogadaAnterior);
       swap2(&cartas[inicio], &cartas[i]);
     }
   }
@@ -108,15 +125,14 @@ void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index,
 {
   if (index == tamanho) 
   {
-    permutate(subset, 0, tamanho, jogadaAnterior);
+    permute(subset, 0, tamanho, jogadaAnterior);
     return;
   }
-  subset[index] = 0;
+  subset[index] = L'0';
   generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
   subset[index] = cartas[index];
   generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
- 
-  
+  subset[index] = '\0';
 }
 
 int main() 
@@ -131,8 +147,7 @@ int main()
   {
     assert(wscanf(L"%100ls", &jogadaAnterior) == 1);
     assert(wscanf(L"%100ls", &cartas) == 1);
-    int tamanho = sizeof(cartas) / sizeof(cartas[0]);
-  
+    int tamanho = wcslen(cartas);
     wchar_t subset[tamanho];
 
     wprintf(L"Teste %d\n", i+1);
