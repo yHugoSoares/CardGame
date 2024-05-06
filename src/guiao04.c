@@ -126,7 +126,7 @@ int main()
   setlocale(LC_CTYPE, "C.UTF-8");
 
   int numTestes = 0;
-  wchar_t cartas[] = L"🂠", jogadaAnterior[] = L"🂠"; // 🃌     🃜🂬🂼
+  wchar_t cartas[100] = L"🂠", jogadaAnterior[100] = L"🂠"; // 🃌     🃜🂬🂼
 
   assert(wscanf(L"%d", &numTestes) == 1);
   for (int i = 0; i < numTestes; i++)
