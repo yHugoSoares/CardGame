@@ -5,53 +5,126 @@
 #include <locale.h>
 #include <wchar.h>
 #include <assert.h>
-#include <ctype.h>
 #include "functions.h"
 
-// void retiraEspacos(wchar_t arr[])
-// {
-//   int len = wcslen(arr), k = 0;
-//   wchar_t temp[len];
-//   for (int i = 0; i < len; i++)
-//   {
-//     if (arr[i] != L'0') temp[k++] = arr[i];
-//   }
-//   for (int i = 0; i < len; i++)
-//   {
-//     arr[i] = temp[i];
-//   }
-// }
+void swap2(int numSubString, int len, wchar_t cartas[numSubString][len], int i, int j) // implementação do swap para troca de posição duas sequências
+{
+    wchar_t aux[len];
 
-// int emptyArray(wchar_t arr[], int tamanho)
-// {
-//   for (int i = 0; i < tamanho; i++)
-//   {
-//     if (arr[i] != '\0' || arr[i] != L' ') return 0;
-//   }
-//   return 1;
-// }
+    wcscpy(aux, cartas[i]);
+	wcscpy(cartas[i], cartas[j]);
+	wcscpy(cartas[j], aux);
+}
+
+int soma(wchar_t cartas[]){
+  int soma = 0;
+  for (int i = 0; cartas[i] != '\0'; i++){
+    soma += cartas[i];
+  }
+  return soma;
+}
+
+int comparaSeq(wchar_t c1[], int l1, wchar_t c2[], int l2)
+{
+	if (wcslen(c1) == 0 || wcslen(c2) == 0)
+		return 0;
+
+	if (conjunto(c1, wcslen(c1)) && !conjunto(c2, wcslen(c2)))
+		return 0;
+	else if (seq(c1, wcslen(c1), 1) && seq(c2, wcslen(c2)/2, 2))
+		return 0;
+	else if (wcslen(c1) > wcslen(c2))
+		return 1;
+	else if (comparaCartas(c1[l1],c2[l2]))
+		return 1;
+	else if (c1[l1] == c2[l1])
+		return comparaSeq(c1, l1+1, c2, l2+1);
+	else
+		return 0;
+}
+
+void bsort2(int numSubString, int len, wchar_t cartas[numSubString][len]) // implementação do bubble sort para ordenar as sequências
+{	
+    int i, j;	
+    for (i = numSubString; i > 0; i--)	
+        for (j = 1; j < i; j++)	
+            if (comparaSeq(cartas[j-1], 0, cartas[j], 0))
+                swap2(numSubString, len, cartas, j-1, j);
+}
+
+void isort2(wchar_t cartas[], int numCartas) // implementação do insertion sort para ordenar as cartas de uma sequência
+{	
+    int i, j;
+    wchar_t aux;
+    for (i = 0; i < numCartas; i++) 
+    {
+        aux = cartas[i];	
+        for (j = i; j > 0 && comparaCartas(cartas[j-1],aux); j--)
+            cartas[j] = cartas[j-1];	
+        cartas[j] = aux;	
+    }	
+}
+
+void ordena2(int numSubStrings, int len, wchar_t subStrings[numSubStrings][len]) // ordena as sequências e as cartas das sequências por ordem crescente
+{
+    for (int i = 0; i < numSubStrings; i++)
+         isort2(subStrings[i], wcslen(subStrings[i]));
+    bsort2(numSubStrings, len, subStrings);
+}
+
+// testa casos especiais
+int casosEspeciais(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
+{
+    int tamanhoJogada = wcslen(jogadaAtual);
+    int tamanhoAnterior = wcslen(jogadaAnterior);
+
+    int tudoReis = 1;
+    for (int i = 0; i < tamanhoAnterior; i++)
+        if (jogadaAnterior[i] % 16 != 14) tudoReis = 0;
+    
+    if (tudoReis)
+    {
+        if (tamanhoAnterior == 1 && conjunto(jogadaAtual, tamanhoJogada) && tamanhoJogada == 4)
+            return 1;
+        else if (tamanhoAnterior == 1 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 3)
+            return 1;
+        else if (tamanhoAnterior == 2 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 4)
+            return 1;
+        else if (tamanhoAnterior == 3 && seq(jogadaAtual, tamanhoJogada/2, 2) && tamanhoJogada/2 == 5)
+            return 1;
+    }
+
+    return 0;
+}
 
 // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
 int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
 {
-	int tipoIgual = 0;
-	int tamanhoIgual = 0;
-	int valorSuperior = 0;
+    if (casosEspeciais(jogadaAtual, jogadaAnterior)) return 1;
+    
+    int tamanhoJogada = wcslen(jogadaAtual);
+    int tamanhoAnterior = wcslen(jogadaAnterior);
+    int tipoIgual = 0;
+    int tamanhoIgual = 0;
+    int valorSuperior = 0;
 
-	if ((conjunto(jogadaAtual, wcslen(jogadaAtual)) && conjunto(jogadaAnterior, wcslen(jogadaAtual)))   ||
-		(seq(jogadaAtual, wcslen(jogadaAtual), 1)   && seq(jogadaAnterior, wcslen(jogadaAtual), 1)) 	||
-		(seq(jogadaAtual, wcslen(jogadaAtual)/2, 2) && seq(jogadaAnterior, wcslen(jogadaAtual)/2, 2)))
-		tipoIgual = 1;
+    if (conjunto(jogadaAtual,tamanhoJogada) && conjunto(jogadaAnterior, tamanhoAnterior))
+        tipoIgual = 1;
+    else if (seq(jogadaAtual, tamanhoJogada, 1) && seq(jogadaAnterior, tamanhoAnterior, 1))
+        tipoIgual = 1;
+    else if (seq(jogadaAtual, tamanhoJogada/2, 2) && seq(jogadaAnterior, tamanhoAnterior/2, 2))
+        tipoIgual = 1;
 
-	if (wcslen(jogadaAtual) == wcslen(jogadaAnterior))
-		tamanhoIgual = 1;
+    if (wcslen(jogadaAtual) == wcslen(jogadaAnterior))
+            tamanhoIgual = 1;
 
-	if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadaAnterior, wcslen(jogadaAnterior))))
-		valorSuperior = 1;
+    if (comparaCartas(maiorCarta(jogadaAtual, wcslen(jogadaAtual)), maiorCarta(jogadaAnterior, wcslen(jogadaAnterior))))
+            valorSuperior = 1;
 
-	if (tipoIgual && tamanhoIgual && valorSuperior) return 1;
-	else return 0;
+    if (tipoIgual && tamanhoIgual && valorSuperior) return 1;
+    else return 0;
 }
+
 
 // combinacaoValida que testa se a jogada recebida como argumento é conjunto, seq ou dupla seq
 int combinacaoValida(wchar_t jogadaAtual[])
@@ -92,18 +165,16 @@ int power(int n, int length)
 {
 	int r = 1;
 	for (int i = 0; i < length; i++)
-	{
 		r *= n;
-	}
 	return r;
 }
 
 // Function to generate all substrings of a given word
-void generateSubstrings(const wchar_t *word, wchar_t jogadaAnterior[]) 
+void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[]) 
 {
 	int len = wcslen(word);
 	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-	wchar_t cartasSubStrings[numSubstrings][100];
+	wchar_t jogadasPossiveis[numSubstrings][len+1];
 	
 	// Loop to iterate over all possible substring lengths
 	for (int i = 1; i <= numSubstrings; i++) 
@@ -116,24 +187,32 @@ void generateSubstrings(const wchar_t *word, wchar_t jogadaAnterior[])
 		// Loop through each character of the word
 		for (int k = len - 1; k >= 0; k--) 
 		{
-		if (binary & (1 << k)) 
-		{
-			// If the k-th bit of 'binary' is set, include the corresponding character
-			substring[j++] = word[len - k - 1];
-		}
+			if (binary & (1 << k)) 
+			{
+				// If the k-th bit of 'binary' is set, include the corresponding character
+				substring[j++] = word[len - k - 1];
+			}
 		}
 		substring[j] = L'\0'; // Null-terminate the substring
+		jogadaAnterior = jogadaAnterior;
+		wcscpy(jogadasPossiveis[i-1],substring);
 
-		if(jogadaValida(jogadaAnterior, substring)) cartasSubStrings[i-1][0] = substring;
-
-		// Free allocated memory
 		free(substring);
   	}
-	ordena(cartasSubStrings, numSubstrings, wcslen(cartasSubStrings[0]));
-	for (int i = 0; i < wcslen(cartasSubStrings); i++)
+	
+	ordena2(numSubstrings, len, jogadasPossiveis);
+
+	int printed = 0;
+	for (int i = 0; i < numSubstrings; i++)
 	{
-		imprimeMao(cartasSubStrings[i], wcslen(cartasSubStrings[i]));
+		// if (jogadaValida(jogadaAnterior, jogadasPossiveis[i]))
+		// {
+			imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
+			printed = 1;
+		// }
 	}
+	if (!printed)
+		wprintf(L"PASSO\n");
 	
 }
 
@@ -162,7 +241,7 @@ int main()
     wprintf(L"Teste %d\n", i+1);
     
     // gera todas as permutações possíveis das cartas da mão e coloca-as no array jogadasPossiveis
-    generateSubstrings(mao, jogadaAnterior);
+    geraSubsets(mao, jogadaAnterior);
   }
   
   return 0;
