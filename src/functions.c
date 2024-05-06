@@ -211,6 +211,6 @@ void isort(wchar_t cartas[], int numCartas) // implementação do insertion sort
 void ordena(wchar_t cartas[][100], int linhas, int numCartas) // ordena as sequências e as cartas das sequências por ordem crescente
 {
     for (int i = 0; i < linhas; i++)
-         isort(cartas[i], numCartas);
+        isort(cartas[i], numCartas);
     bsort(cartas, linhas, numCartas);
 }
