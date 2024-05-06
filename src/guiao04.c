@@ -45,17 +45,15 @@ int combinacaoValida(wchar_t jogadaAtual[])
     return 1;
 }
 
-int jogadaValida(wchar_t jogadaAnterior[100], int numJogadasAnteriores, wchar_t jogadaAtual[])
+int jogadaValida(wchar_t jogadaAnterior[100], wchar_t jogadaAtual[])
 {
-  for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+  
     // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
-    if  (jogadaAnterior[0] == 'P' && combinacaoValida(jogadaAtual)) continue;
+    if  (jogadaAnterior[0] == 'P' && combinacaoValida(jogadaAtual)) return 1;
     // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
-    else if (jogadaSuperior(jogadaAtual, jogadaAnterior)) break;
+    else if (jogadaSuperior(jogadaAtual, jogadaAnterior)) return 1;
     // se nenhuma das anteriores se verificar a jogada não é válida
     else return 0;
-    
-  return 1;
 }
 
 int emptyArray(wchar_t arr[], int tamanho)
@@ -67,14 +65,15 @@ int emptyArray(wchar_t arr[], int tamanho)
   return 1;
 }
 
-void printArray(wchar_t arr[], int tamanho) 
+void printArray(wchar_t arr[]) 
 {
-  if (!emptyArray(arr, tamanho))
+  int len = wcslen(arr);
+  if (!emptyArray(arr, len))
   {
-    for (int i = 0; i < tamanho; i++) 
+    for (int i = 0; i < len; i++) 
     {
-      if ((i + 1) == tamanho && arr[i] != '\0') wprintf(L"%lc", arr[i]);
-      else if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
+      if (arr[i] != '\0') wprintf(L"%lc ", arr[i]);
+     
     }
     wprintf(L"\n");
   }
@@ -91,11 +90,8 @@ void permutate(wchar_t cartas[], int inicio, int tamanho, wchar_t jogadaAnterior
 {
   if (inicio == tamanho - 1) 
   {
-    if (jogadaValida(jogadaAnterior, 1, cartas))
-    {
-      printArray(cartas, tamanho);
-      return;
-    } 
+    printArray(cartas);
+    return;
   }
   else
   {
@@ -119,6 +115,8 @@ void generateSubsets(wchar_t cartas[], wchar_t subset[], int tamanho, int index,
   generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
   subset[index] = cartas[index];
   generateSubsets(cartas, subset, tamanho, index + 1, jogadaAnterior);
+ 
+  
 }
 
 int main() 
@@ -126,7 +124,7 @@ int main()
   setlocale(LC_CTYPE, "C.UTF-8");
 
   int numTestes = 0;
-  wchar_t cartas[100] = L"🂠", jogadaAnterior[100] = L"🂠"; // 🃌     🃜🂬🂼
+  wchar_t cartas[] = L"🂠", jogadaAnterior[] = L"🂠"; // 🂼     🃜🂬🃌
 
   assert(wscanf(L"%d", &numTestes) == 1);
   for (int i = 0; i < numTestes; i++)
@@ -143,7 +141,11 @@ int main()
   return 0;  
 }
 
-
+//if (jogadaValida(jogadaAnterior, cartas))
+    // {
+    //   printArray(cartas, tamanho);
+    //   return;
+    // } 
 //int main()
 //{
 //    setlocale(LC_CTYPE, "C.UTF-8");
@@ -175,5 +177,3 @@ int main()
 //    
 //    return 0;
 //}
-//
-  
