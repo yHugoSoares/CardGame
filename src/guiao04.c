@@ -207,7 +207,7 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
         }
   	}
 	
-    // bsort2(index, len, jogadasPossiveis);
+    bsort2(index, len, jogadasPossiveis);
 
 	for (int i = 0; i < index; i++)
 	{
@@ -219,9 +219,11 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
 	
 }
 
-// 1
-// 🃞
-// 🃉🂪🃙🃋🂹🂺🂩🂻🃚🃊
+/*
+1
+🃞
+🃉🂪🃙🃋🂹🂺🂩🂻🃚🃊
+*/
 
 int main()
 {
