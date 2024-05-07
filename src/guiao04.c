@@ -45,12 +45,13 @@ int comparaSeq(wchar_t c1[], wchar_t c2[], int l1, int l2)
 		return 0;
 	else if (seq(c1, wcslen(c1), 1) && seq(c2, wcslen(c2), 2))
 		return 0;
-	else if (comparaCartas(c1[l1],c2[l2]))
+	else if (comparaCartas(c1[l1],c2[l2]) && wcslen(c1) == wcslen(c2))
+    {
 		return 1;
+    }
 	else if (c1[l1] == c2[l1])
 		return comparaSeq(c1, c2, l1+1, l2+1);
-	else
-		return 0;
+	return 0;
 }
 
 void bsort2(int numSubString, int len, wchar_t cartas[numSubString][len]) // implementação do bubble sort para ordenar as sequências
