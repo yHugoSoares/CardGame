@@ -11,8 +11,8 @@ bin/
 # Specific Files
 ./src/guiao04.o
 ./src/functions.o
-input
-output
+# input
+# output
 inputFile
 
 # Object files
