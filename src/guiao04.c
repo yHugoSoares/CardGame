@@ -172,7 +172,7 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
 {
 	int len = wcslen(word);
 	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-	wchar_t jogadasPossiveis[numSubstrings][len];
+	wchar_t jogadasPossiveis[1000][len];
     int index = 0;
 	
 	// Loop to iterate over all possible substring lengths
@@ -186,11 +186,11 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
 		// Loop through each character of the word
 		for (int k = len - 1; k >= 0; k--) 
 		{
-		if (binary & (1 << k)) 
-		{
-			// If the k-th bit of 'binary' is set, include the corresponding character
-			substring[j++] = word[len - k - 1];
-		}
+            if (binary & (1 << k)) 
+            {
+                // If the k-th bit of 'binary' is set, include the corresponding character
+                substring[j++] = word[len - k - 1];
+            }
 		}
 		substring[j] = L'\0'; // Null-terminate the substring
 
@@ -215,9 +215,7 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
         imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
     }
     
-	if (index == 0)
-		wprintf(L"PASSO\n");
-	
+	if (index == 0) wprintf(L"PASSO\n");
 }
 
 /*
