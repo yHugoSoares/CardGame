@@ -69,6 +69,9 @@ int seq(wchar_t cartas[], int numCartas, int mult2) // verifica se é uma sequê
 {
 
     if (numCartas <= 2) return 0; // se não tem cartas suficientes para formar uma sequência
+    if (mult2 == 2 && numCartas%2 != 0) return 0; // se for uma dupla sequência e o número de cartas não for par
+    
+    if (mult2 == 2) numCartas /= 2; // se for uma dupla sequência
 
     wchar_t menorCarta = cartas[0];
 
