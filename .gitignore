@@ -6,7 +6,7 @@
 *.d
 
 # Folders
-*./bin/
+./bin/
 
 # Specific Files
 ./src/guiao04.o
