@@ -76,17 +76,24 @@ void isort2(wchar_t cartas[], int numCartas) // implementação do insertion sor
     }	
 }
 
+// verifica se todas as cartas são reis
+int tudoReis(wchar_t cartas[]) 
+{
+	int len = wcslen(cartas);
+    for (int i = 0; i < len; i++) 
+	{
+		if (cartas[i] % 16 != 14) return 0;
+	}
+	return 1;
+}
+
 // testa casos especiais
 int casosEspeciais(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
 {
     int tamanhoJogada = wcslen(jogadaAtual);
     int tamanhoAnterior = wcslen(jogadaAnterior);
-
-    int tudoReis = 1;
-    for (int i = 0; i < tamanhoAnterior; i++)
-        if (jogadaAnterior[i] % 16 != 14) tudoReis = 0;
     
-    if (tudoReis)
+    if (tudoReis(jogadaAnterior))
     {
         if (tamanhoAnterior == 1 && conjunto(jogadaAtual, tamanhoJogada) && tamanhoJogada == 4)
             return 1;
@@ -167,14 +174,41 @@ void imprimeMao(wchar_t maoCartas[], int numCartas)
 	wprintf(L"\n");
 }
 
+void testaSubSets(wchar_t substring[], wchar_t jogadaAnterior[], int numSubstrings, int len)
+{ 
+	wchar_t jogadasPossiveis[1000][len];
+	int index = 0;
+	int subStringLen = wcslen(substring);
+
+	for (int i = 0; i < numSubstrings; i++)
+	{
+		int jogAnteriorLength = wcslen(jogadaAnterior);
+		if (!(subStringLen == jogAnteriorLength && !tudoReis(jogadaAnterior)))
+		{
+			if (jogadaValida(jogadaAnterior, substring))
+			{
+				isort2(substring, wcslen(substring));
+				wcscpy(jogadasPossiveis[index++],substring);
+				free(substring);
+			}
+		}
+	}
+
+	bsort2(index, len, jogadasPossiveis);
+
+	for (int i = 0; i < index; i++)
+	{
+        imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
+    }
+    
+	if (index == 0) wprintf(L"PASSO\n");
+}
+
 // Function to generate all substrings of a given word
 void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[]) 
 {
 	int len = wcslen(word);
 	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-	wchar_t jogadasPossiveis[1000][len];
-    int index = 0;
-	
 	// Loop to iterate over all possible substring lengths
 	for (int i = 1; i <= numSubstrings; i++) 
 	{
@@ -188,34 +222,13 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
 		{
             if (binary & (1 << k)) 
             {
-                // If the k-th bit of 'binary' is set, include the corresponding character
-                substring[j++] = word[len - k - 1];
+				substring[j++] = word[len - k - 1];
             }
+			
 		}
 		substring[j] = L'\0'; // Null-terminate the substring
-
-        if (!jogadaValida(jogadaAnterior, substring))
-        {
-            free(substring);
-            continue;
-        }
-        else
-        {
-            isort2(substring, wcslen(substring));
-            wcscpy(jogadasPossiveis[index],substring);
-            index++;
-            free(substring);
-        }
+		testaSubSets(substring, jogadaAnterior, numSubstrings, len);
   	}
-	
-    bsort2(index, len, jogadasPossiveis);
-
-	for (int i = 0; i < index; i++)
-	{
-        imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
-    }
-    
-	if (index == 0) wprintf(L"PASSO\n");
 }
 
 /*
