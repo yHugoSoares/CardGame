@@ -76,17 +76,23 @@ void isort2(wchar_t cartas[], int numCartas) // implementação do insertion sor
     }	
 }
 
+int tudoReis(wchar_t cartas[]) 
+{
+    int tam = wcslen(cartas);
+    for(int i = 0; i < tam; i++) 
+    {
+        if (cartas[i] % 16 != 14) return 0;
+    }
+    return 1;
+}
+
 // testa casos especiais
 int casosEspeciais(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
 {
     int tamanhoJogada = wcslen(jogadaAtual);
     int tamanhoAnterior = wcslen(jogadaAnterior);
-
-    int tudoReis = 1;
-    for (int i = 0; i < tamanhoAnterior; i++)
-        if (jogadaAnterior[i] % 16 != 14) tudoReis = 0;
     
-    if (tudoReis)
+    if (tudoReis(jogadaAnterior))
     {
         if (tamanhoAnterior == 1 && conjunto(jogadaAtual, tamanhoJogada) && tamanhoJogada == 4)
             return 1;
@@ -167,57 +173,106 @@ void imprimeMao(wchar_t maoCartas[], int numCartas)
 	wprintf(L"\n");
 }
 
-// Function to generate all substrings of a given word
-void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[]) 
+void imprimeJogadasPossiveis(int len, wchar_t jogadasPossiveis[1000][len], int index)
 {
-	int len = wcslen(word);
-	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-	wchar_t jogadasPossiveis[1000][len];
-    int index = 0;
-	
-	// Loop to iterate over all possible substring lengths
-	for (int i = 1; i <= numSubstrings; i++) 
-	{
-		// Convert 'i' to binary representation to determine which characters to include
-		int binary = i;
-		int j = 0;
-		wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
-		
-		// Loop through each character of the word
-		for (int k = len - 1; k >= 0; k--) 
-		{
-            if (binary & (1 << k)) 
-            {
-                // If the k-th bit of 'binary' is set, include the corresponding character
-                substring[j++] = word[len - k - 1];
-            }
-		}
-		substring[j] = L'\0'; // Null-terminate the substring
-
-        if (!jogadaValida(jogadaAnterior, substring))
+    if (index == 0) wprintf(L"PASSO\n");
+    else
+    {
+        for (int i = 0; i < index; i++)
         {
-            free(substring);
-            continue;
+            imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
         }
-        else
-        {
-            isort2(substring, wcslen(substring));
-            wcscpy(jogadasPossiveis[index],substring);
-            index++;
-            free(substring);
-        }
-  	}
-	
-    bsort2(index, len, jogadasPossiveis);
-
-	for (int i = 0; i < index; i++)
-	{
-        imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
     }
-    
-	if (index == 0) wprintf(L"PASSO\n");
 }
 
+void daCombinacao(const wchar_t palavra[], wchar_t resultado[], int i)
+{
+    int tam = wcslen(palavra);
+    int j = 0; 
+    
+    for (int k = tam -1 ; k >= 0; k--) 
+    {
+        if (i & (1 << k)) 
+        {
+            resultado[j++] = palavra[tam - k - 1];
+        }
+    }
+    resultado[j] = L'\0';
+}
+
+// funcao para pegar na mão e devolver apenas as cartas maiores que aquelas jogadas
+void daCartasMaiores(wchar_t *cartas, wchar_t maiorCarta)
+{
+    int tamCartas = wcslen(cartas);
+    wchar_t *tmp = (wchar_t *)malloc((tamCartas + 1) * sizeof(wchar_t));
+    // orderna as cartas
+    isort2(cartas, tamCartas);
+
+    int index = 0;
+    for (int i = 0; i < tamCartas; i++)
+    {
+        if (comparaCartas(cartas[i], maiorCarta))
+        {
+        tmp[index++] = cartas[i];
+        }
+    }
+    tmp[index] = L'\0';
+
+    wcscpy(cartas, tmp);
+    free(tmp);
+}
+
+// Function to generate all substrings of a given word
+void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[]) 
+{
+    // int numSubstrings = power(2, len) - 1;  // Calculate the number of substrings
+    int reis = tudoReis(jogadaAnterior);
+    int tamJogadaAnterior = wcslen(jogadaAnterior);
+
+    // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
+    if (!reis)
+    {
+        // daCartasMaiores(word, maiorCarta(jogadaAnterior, tamJogadaAnterior));
+    }
+    int len = wcslen(word);
+
+    // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
+    if (len < tamJogadaAnterior)
+    {
+        wprintf(L"PASSO\n");
+        return;
+    }
+
+    int index = 0;
+    int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
+    wchar_t jogadasPossiveis[1000][len];
+    wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
+
+
+    // Loop to iterate over all possible substring lengths
+	for (int i = 1; i <= numSubstrings; i++) 
+	{
+        daCombinacao(word, substring, i);
+        
+        if (!tudoReis(jogadaAnterior))
+        {
+            daCartasMaiores(word, maiorCarta(jogadaAnterior, wcslen(jogadaAnterior)));
+            if (wcslen(jogadaAnterior) == wcslen(substring) && jogadaValida(jogadaAnterior, substring))
+            {
+                isort2(substring, wcslen(substring));
+                wcscpy(jogadasPossiveis[index++],substring);
+            }
+        } 
+        else if (jogadaValida(jogadaAnterior, substring))
+        {
+            isort2(substring, wcslen(substring));
+            wcscpy(jogadasPossiveis[index++],substring);
+        }
+  	}
+    free(substring);
+    bsort2(index, len, jogadasPossiveis);
+    imprimeJogadasPossiveis(len, jogadasPossiveis, index);
+}
 /*
 1
 🃞
