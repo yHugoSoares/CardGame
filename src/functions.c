@@ -48,11 +48,10 @@ int checkConsecutivo(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAt
             return 1;
         }
     }
-
     return 0;
 }
 
-int checkImagem(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual)
+int checkImagem(wchar_t cartas[], int numCartas, int mult2, wchar_t cartaAtual) // eu sou bonita te amo hugao <3
 {
     for (int j = 0; j < numCartas*mult2; j++)
     {
