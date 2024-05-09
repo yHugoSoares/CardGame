@@ -7,6 +7,7 @@
 
 # Folders
 bin/
+.vscode/
 
 # Specific Files
 ./src/guiao04.o
