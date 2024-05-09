@@ -204,12 +204,13 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
 	int len = wcslen(word);
 	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
 	wchar_t jogadasPossiveis[1000][len];
-    int index = 0;
+	int index = 0;
+	wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
 	
 	// Loop to iterate over all possible substring lengths
 	for (int i = 1; i <= numSubstrings; i++) 
 	{
-        wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
+        
 		daCombinacao(word, substring, i);
 
         if (!tudoReis(jogadaAnterior))
@@ -218,17 +219,15 @@ void geraSubsets(const wchar_t *word, wchar_t jogadaAnterior[])
             {
                 isort2(substring, wcslen(substring));
                 wcscpy(jogadasPossiveis[index++],substring);
-                free(substring);
             }
         } 
         else if (jogadaValida(jogadaAnterior, substring))
         {
             isort2(substring, wcslen(substring));
             wcscpy(jogadasPossiveis[index++],substring);
-            free(substring);
         }
-        else free(substring);
   	}
+    free(substring);
     bsort2(index, len, jogadasPossiveis);
     imprimeJogadasPossiveis(len, jogadasPossiveis, index);
 }
