@@ -175,63 +175,106 @@ void imprimeMao(wchar_t maoCartas[], int numCartas)
 
 void imprimeJogadasPossiveis(int len, wchar_t jogadasPossiveis[1000][len], int index)
 {
-    if (index == 0) wprintf(L"PASSO\n");
-    else
-    {
-	    for (int i = 0; i < index; i++)
-        {
-            imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
-        }
+	for (int i = 0; i < index; i++)
+	{
+        imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
     }
+    
+	if (index == 0) wprintf(L"PASSO\n");
 }
 
-void daCombinacao(const wchar_t palavra[], wchar_t resultado[], int i)
+void daCombinacao(const wchar_t palavra[], wchar_t resultado[], int i, int reis, int tamJogadaAnterior)
 {
     int tam = wcslen(palavra);
-    int j = 0; 
+    int j = 0;
 
-    for (int k = tam -1 ; k >= 0; k--) 
+    for (int k = tam - 1; k >= 0; k--)
     {
-        if (i & (1 << k)) 
+        if (i & (1 << k))
         {
             resultado[j++] = palavra[tam - k - 1];
         }
     }
     resultado[j] = L'\0';
+    if (!reis && (int)wcslen(resultado) != tamJogadaAnterior)
+        resultado[0] = L'\0';
+    
+    isort2(resultado, wcslen(resultado));
+}
+
+// funcao para pegar na mão e devolver apenas as cartas maiores que aquelas jogadas
+void daCartasMaiores(wchar_t *cartas, int menorCarta)
+{
+    int tamCartas = wcslen(cartas);
+    wchar_t tmp[tamCartas + 1];
+
+    
+
+    int index = 0;
+    for (int i = 0; i < tamCartas; i++)
+    {
+        if (cartas[i] % 16 >= menorCarta)
+        {
+            tmp[index++] = cartas[i];
+        }
+    }
+    tmp[index] = L'\0';
+    // orderna as cartas
+    isort2(cartas, tamCartas);
+
+    wcscpy(cartas, tmp);
 }
 
 // Function to generate all substrings of a given word
 void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[]) 
 {
-	int len = wcslen(word);
-	int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
+    // int numSubstrings = power(2, len) - 1;  // Calculate the number of substrings
+
+    int reis = tudoReis(jogadaAnterior);
+    int tamJogadaAnterior = wcslen(jogadaAnterior);
+
+    // wprintf(L"carta menor da jogada anterior: %lc\n", menorCarta(jogadaAnterior));
+
+    // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
+    if (!reis)
+    {
+        daCartasMaiores(word, menorCarta(jogadaAnterior));
+    }
+    int len = wcslen(word);
+
+    // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
+    if (len < tamJogadaAnterior)
+    {
+        wprintf(L"PASSO\n");
+        return;
+    }
+
     int index = 0;
-	wchar_t jogadasPossiveis[1000][len];    
+    int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
+    // TODO: este array de 1000 deveria passar a dinamico
+    wchar_t jogadasPossiveis[1000][len];
+    
+    // initializa o array que vai guardar as strings das combinações
     wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
-	
-    // Loop to iterate over all possible substring lengths
+	// Loop to iterate over all possible substring lengths
 	for (int i = 1; i <= numSubstrings; i++) 
 	{
-        
-		daCombinacao(word, substring, i);
+        daCombinacao(word, substring, i, reis, wcslen(jogadaAnterior));
 
-        if (!tudoReis(jogadaAnterior))
+        if (!reis)
         {
-            if (wcslen(jogadaAnterior) == wcslen(substring) && jogadaValida(jogadaAnterior, substring))
+            if (substring[0] != L'\0' && jogadaValida(jogadaAnterior, substring))
             {
+                // isort2(substring, wcslen(substring));
                 wcscpy(jogadasPossiveis[index++],substring);
             }
         } 
         else if (jogadaValida(jogadaAnterior, substring))
         {
+            // isort2(substring, wcslen(substring));
             wcscpy(jogadasPossiveis[index++],substring);
         }
   	}
-    for (int i = 0; i < index; i++)
-    {
-        isort2(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
-    }
-    
     free(substring);
     bsort2(index, len, jogadasPossiveis);
     imprimeJogadasPossiveis(len, jogadasPossiveis, index);
