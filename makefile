@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror -lm -pedantic# -pg -g -O
+CFLAGS=-Wall -Wextra -Werror -lm -pedantic -pg -g -O
 
 #aqui metes o binario
 TARGET = guiao04v2

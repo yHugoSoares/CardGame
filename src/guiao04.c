@@ -77,7 +77,14 @@ void isort2(wchar_t cartas[], int numCartas) // implementação do insertion sor
 }
 
 int tudoReis(wchar_t cartas[]) 
+int tudoReis(wchar_t cartas[]) 
 {
+    int tam = wcslen(cartas);
+    for(int i = 0; i < tam; i++) 
+    {
+        if (cartas[i] % 16 != 14) return 0;
+    }
+    return 1;
     int tam = wcslen(cartas);
     for(int i = 0; i < tam; i++) 
     {
@@ -226,7 +233,29 @@ void daCartasMaiores(wchar_t *cartas, int menorCarta)
 
 // Function to generate all substrings of a given word
 void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[]) 
+void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[]) 
 {
+    // int numSubstrings = power(2, len) - 1;  // Calculate the number of substrings
+
+    int reis = tudoReis(jogadaAnterior);
+    int tamJogadaAnterior = wcslen(jogadaAnterior);
+
+    // wprintf(L"carta menor da jogada anterior: %lc\n", menorCarta(jogadaAnterior));
+
+    // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
+    if (!reis)
+    {
+        daCartasMaiores(word, menorCarta(jogadaAnterior));
+    }
+    int len = wcslen(word);
+
+    // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
+    if (len < tamJogadaAnterior)
+    {
+        wprintf(L"PASSO\n");
+        return;
+    }
+
     // int numSubstrings = power(2, len) - 1;  // Calculate the number of substrings
 
     int reis = tudoReis(jogadaAnterior);
@@ -255,6 +284,12 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
     
     // initializa o array que vai guardar as strings das combinações
     wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
+    int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
+    // TODO: este array de 1000 deveria passar a dinamico
+    wchar_t jogadasPossiveis[1000][len];
+    
+    // initializa o array que vai guardar as strings das combinações
+    wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
 	// Loop to iterate over all possible substring lengths
 	for (int i = 1; i <= numSubstrings; i++) 
 	{
@@ -269,13 +304,27 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
             }
         } 
         else if (jogadaValida(jogadaAnterior, substring))
+        daCombinacao(word, substring, i, reis, wcslen(jogadaAnterior));
+
+        if (!reis)
         {
+            if (substring[0] != L'\0' && jogadaValida(jogadaAnterior, substring))
+            {
+                // isort2(substring, wcslen(substring));
+                wcscpy(jogadasPossiveis[index++],substring);
+            }
+        } 
+        else if (jogadaValida(jogadaAnterior, substring))
+        {
+            // isort2(substring, wcslen(substring));
             // isort2(substring, wcslen(substring));
             wcscpy(jogadasPossiveis[index++],substring);
         }
   	}
     free(substring);
+    free(substring);
     bsort2(index, len, jogadasPossiveis);
+    imprimeJogadasPossiveis(len, jogadasPossiveis, index);
     imprimeJogadasPossiveis(len, jogadasPossiveis, index);
 }
 /*
