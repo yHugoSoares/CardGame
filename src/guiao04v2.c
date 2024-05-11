@@ -419,7 +419,7 @@ int daTipoResultadoEsperado(const int tipoJogada, const int tamanho)
 void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
 {
     // int numSubstrings = power(2, len) - 1;  // Calculate the number of substrings
-
+    // isort(jogadaAnterior, wcslen(jogadaAnterior));
     int reis = tudoReis(jogadaAnterior);
     int tamJogadaAnterior = wcslen(jogadaAnterior);
     int tipoJogada = daTipoJogada(jogadaAnterior);
@@ -471,7 +471,7 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
     imprimeJogadasPossiveis(len, jogadasPossiveis, index);
     */
 
-    wchar_t jogadasPossiveis[1000][len];
+    wchar_t jogadasPossiveis[2000][len];
     int index = 0;
     int totalCombinacoes = 0;
     int resultadoEsperado = daTipoResultadoEsperado(tipoJogada, tamJogadaAnterior);
@@ -531,7 +531,7 @@ int main()
     {
         // lê e guarda a jogada anterior
         assert(wscanf(L"%100ls", jogadaAnterior) != 0);
-
+        
         // lê e guarda a mao do jogador
         assert(wscanf(L"%100ls", mao) != 0);
 
