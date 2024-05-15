@@ -24,16 +24,6 @@ void swap2(int len, wchar_t cartas[][len], int i, int j) // implementação do s
 	wcscpy(cartas[j], aux);
 }
 
-int soma(wchar_t cartas[])
-{
-    int soma = 0;
-    for (int i = 0; cartas[i] != '\0'; i++)
-    {
-        soma += cartas[i];
-    }
-    return soma;
-}
-
 // Compares two wide character arrays c1 and c2 based on several conditions, returning 0 or 1.
 int comparaSeq(wchar_t c1[], wchar_t c2[], int l1, int l2)
 {
