@@ -169,7 +169,6 @@ void imprimeJogadasPossiveis(int len, wchar_t jogadasPossiveis[1000][len], int i
 	{
         imprimeMao(jogadasPossiveis[i], wcslen(jogadasPossiveis[i]));
     }
-    
 	if (index == 0) wprintf(L"PASSO\n");
 }
 
@@ -242,7 +241,7 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
     int index = 0;
     int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
     // TODO: este array de 1000 deveria passar a dinamico
-    wchar_t jogadasPossiveis[1000][len];
+    wchar_t jogadasPossiveis[2000][len];
     
     // initializa o array que vai guardar as strings das combinações
     wchar_t *substring = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
