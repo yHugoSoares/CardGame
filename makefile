@@ -2,9 +2,9 @@ CC=gcc
 CFLAGS=-Wall -Wextra -Werror -lm -pedantic -pg -g -O
 
 #aqui metes o binario
-TARGET = guiao04v3
+TARGET = guiaoFinal
 #aqui metes todos os .c
-SRCS = src/guiao04v3.c src/functions.c
+SRCS = src/guiaoFinal.c src/functions.c
 OBJS = $(SRCS:.c=.o)
 
 # Regras
