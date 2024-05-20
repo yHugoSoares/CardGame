@@ -238,68 +238,7 @@ void daCartasMaiores(wchar_t *cartas, int menorCarta)
     wcscpy(cartas, tmp);
 }
 
-// Function to generate all substrings of a given word
-void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
-{
-        int reis = tudoReis(jogadaAnterior);
-        int tamJogadaAnterior = wcslen(jogadaAnterior);
-
-        // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
-        if (!reis)
-        {
-            daCartasMaiores(word, menorCarta(jogadaAnterior));
-        }
-        int len = wcslen(word);
-
-        // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
-        if (len < tamJogadaAnterior)
-        {
-            wprintf(L"PASSO\n");
-            return;
-        }
-
-        int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-
-        wchar_t bestPlay[len + 1];
-        bestPlay[0] = L'\0'; // Initialize with empty play
-
-        wchar_t *substring = (wchar_t *) malloc((len + 1) * sizeof(wchar_t));
-        // Loop to iterate over all possible substring lengths
-        for (int i = 1; i <= numSubstrings; i++)
-        {
-            daCombinacao(word, substring, i, reis, wcslen(jogadaAnterior));
-
-            if (!reis)
-            {
-                if (substring[0] != L'\0' && jogadaValida(jogadaAnterior, substring))
-                {
-                    if (bestPlay[0] == L'\0' || comparaSeq(substring, bestPlay, 0, 0))
-                    {
-                        wcscpy(bestPlay, substring);
-                    }
-                }
-            }
-            else if (jogadaValida(jogadaAnterior, substring))
-            {
-                if (bestPlay[0] == L'\0' || comparaSeq(substring, bestPlay, 0, 0))
-                {
-                    wcscpy(bestPlay, substring);
-                }
-            }
-        }
-        free(substring);
-
-        if (bestPlay[0] == L'\0')
-        {
-            wprintf(L"PASSO\n");
-        }
-        else
-        {
-            imprimeMao(bestPlay, wcslen(bestPlay));
-        }
-}
-
-wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100], int len, wchar_t mao[])
+wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100], int len, wchar_t *mao)
 {
     int tamJogadaAnterior = wcslen(jogadasAnterior[len-1]);
     int tam = wcslen(mao);
@@ -322,7 +261,7 @@ wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100], int len, wchar_t mao[])
             resultado[0] = L'\0';
         
         isort2(resultado, wcslen(resultado));
-        if (resultado[0] != L'\0' && jogadaValidaMatriz(jogadasAnterior, len, resultado))
+        if (jogadaValidaMatriz(jogadasAnterior, len, resultado))
         {
             return *resultado;
         }
@@ -363,6 +302,6 @@ int main()
     }
     else
         wprintf(L"%100ls", jogadaCorreta(jogadasAnterior, linhas, mao));
-    
+
     return 0;
 }
