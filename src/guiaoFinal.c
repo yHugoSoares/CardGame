@@ -152,6 +152,19 @@ int jogadaSuperior(wchar_t jogadaAtual[], wchar_t jogadaAnterior[])
     else return 0;
 }
 
+int jogadaValidaMatriz(wchar_t jogadasAnteriores[][100], int numJogadasAnteriores, wchar_t jogadaAtual[])
+{
+    for (int i = numJogadasAnteriores-1; i > numJogadasAnteriores-4 && i > 0; i--)
+        // verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
+        if  (jogadasAnteriores[i][0] == 'P' && combinacaoValida(jogadaAtual)) continue;
+        // verifica se a jogada atual é do mesmo tipo, de tamanho igual e de valor superior à jogada anterior
+        else if (jogadaSuperior(jogadaAtual, jogadasAnteriores[i])) break;
+        // se nenhuma das anteriores se verificar a jogada não é válida
+        else return 0;
+    
+    return 1;
+}
+
 int jogadaValida(wchar_t jogadaAnterior[100], wchar_t jogadaAtual[])
 {
 	// verifica se a jogada anterior é "PASSO" e se a jogada atual é uma combinação válida
@@ -279,6 +292,11 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
     bsort2(index, len, jogadasPossiveis);
     imprimeJogadasPossiveis(len, jogadasPossiveis, index);
 }
+
+wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100])
+{
+    return 0;
+}
 /*
 1
 🃞
@@ -287,31 +305,26 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
 
 int main()
 {
-  setlocale(LC_CTYPE, "C.UTF-8");
-  
-  int testes;
-
-  wchar_t jogadaAnterior[100];
-  wchar_t mao[100]; 
-
-  // lê o número de testes que vão ser lidos
-  assert(wscanf(L"%d", &testes) == 1);
-
-  // itera para cada teste
-  for (int i = 0; i < testes; i++)
-  {
-    // lê e guarda a jogada anterior
-    assert(wscanf(L"%100ls", jogadaAnterior) != 0);
-
-    // lê e guarda a mao do jogador 
-    assert(wscanf(L"%100ls", mao) != 0);
-
-    // print do teste atual
-    wprintf(L"Teste %d\n", i+1);
+    setlocale(LC_CTYPE, "C.UTF-8");
     
-    // gera todas as permutações possíveis das cartas da mão e coloca-as no array jogadasPossiveis
-    geraSubsets(mao, jogadaAnterior);
-  }
-  
-  return 0;
+    int linhas;
+    wchar_t mao[60];
+
+    // lê o número de testes que vão ser lidos
+    assert(wscanf(L"%d", &linhas) == 1);
+    assert(wscanf(L"%ls", &mao) != 0);
+
+    // cria matriz com jogadas anteriores
+    wchar_t jogadasAnterior[60][linhas];
+    // itera para cada teste
+    for (int i = 0; i < linhas; i++)
+    {
+        // lê e guarda a jogada anterior
+        assert(wscanf(L"%100ls", jogadasAnterior) != 0);
+    }
+
+    // print da jogadaCorreta
+    wprintf(L"%100ls", jogadaCorreta(jogadasAnterior));
+
+    return 0;
 }
