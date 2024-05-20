@@ -222,10 +222,8 @@ void daCartasMaiores(wchar_t *cartas, int menorCarta)
 {
     int tamCartas = wcslen(cartas);
     wchar_t tmp[tamCartas + 1];
-
-    
-
     int index = 0;
+
     for (int i = 0; i < tamCartas; i++)
     {
         if (cartas[i] % 16 >= menorCarta)
@@ -243,37 +241,45 @@ void daCartasMaiores(wchar_t *cartas, int menorCarta)
 // Function to generate all substrings of a given word
 void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
 {
-    int reis = tudoReis(jogadaAnterior);
-    int tamJogadaAnterior = wcslen(jogadaAnterior);
+        int reis = tudoReis(jogadaAnterior);
+        int tamJogadaAnterior = wcslen(jogadaAnterior);
 
-    // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
-    if (!reis)
-    {
-        daCartasMaiores(word, menorCarta(jogadaAnterior));
-    }
-    int len = wcslen(word);
-
-    // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
-    if (len < tamJogadaAnterior)
-    {
-        wprintf(L"PASSO\n");
-        return;
-    }
-
-    int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
-
-    wchar_t bestPlay[len + 1];
-    bestPlay[0] = L'\0'; // Initialize with empty play
-
-    wchar_t *substring = (wchar_t *) malloc((len + 1) * sizeof(wchar_t));
-    // Loop to iterate over all possible substring lengths
-    for (int i = 1; i <= numSubstrings; i++)
-    {
-        daCombinacao(word, substring, i, reis, wcslen(jogadaAnterior));
-
+        // se as cartas jogadas não são reis, então posso só considerar as maiores cartas da mão
         if (!reis)
         {
-            if (substring[0] != L'\0' && jogadaValida(jogadaAnterior, substring))
+            daCartasMaiores(word, menorCarta(jogadaAnterior));
+        }
+        int len = wcslen(word);
+
+        // se o tamanho da mão resultante for inferior ao tamanho de cartas jogadas, não posso jogar
+        if (len < tamJogadaAnterior)
+        {
+            wprintf(L"PASSO\n");
+            return;
+        }
+
+        int numSubstrings = power(2, len) - 1; // Calculate the number of substrings
+
+        wchar_t bestPlay[len + 1];
+        bestPlay[0] = L'\0'; // Initialize with empty play
+
+        wchar_t *substring = (wchar_t *) malloc((len + 1) * sizeof(wchar_t));
+        // Loop to iterate over all possible substring lengths
+        for (int i = 1; i <= numSubstrings; i++)
+        {
+            daCombinacao(word, substring, i, reis, wcslen(jogadaAnterior));
+
+            if (!reis)
+            {
+                if (substring[0] != L'\0' && jogadaValida(jogadaAnterior, substring))
+                {
+                    if (bestPlay[0] == L'\0' || comparaSeq(substring, bestPlay, 0, 0))
+                    {
+                        wcscpy(bestPlay, substring);
+                    }
+                }
+            }
+            else if (jogadaValida(jogadaAnterior, substring))
             {
                 if (bestPlay[0] == L'\0' || comparaSeq(substring, bestPlay, 0, 0))
                 {
@@ -281,30 +287,49 @@ void geraSubsets(wchar_t *word, wchar_t jogadaAnterior[])
                 }
             }
         }
-        else if (jogadaValida(jogadaAnterior, substring))
+        free(substring);
+
+        if (bestPlay[0] == L'\0')
         {
-            if (bestPlay[0] == L'\0' || comparaSeq(substring, bestPlay, 0, 0))
+            wprintf(L"PASSO\n");
+        }
+        else
+        {
+            imprimeMao(bestPlay, wcslen(bestPlay));
+        }
+}
+
+wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100], int len, wchar_t mao[])
+{
+    int tamJogadaAnterior = wcslen(jogadasAnterior[len-1]);
+    int tam = wcslen(mao);
+    int reis = tudoReis(jogadasAnterior[len-1]);
+    int numSubstrings = power(2, len) - 1;
+    wchar_t resultado[tamJogadaAnterior + 1];
+    int j = 0;
+
+    for (int i = 0; i < numSubstrings; i++)
+    {
+        for (int k = tam - 1; k >= 0; k--)
+        {
+            if (i & (1 << k))
             {
-                wcscpy(bestPlay, substring);
+                resultado[j++] = mao[tam - k - 1];
             }
         }
+        resultado[j] = L'\0';
+        if (!reis && (int)wcslen(resultado) != tamJogadaAnterior)
+            resultado[0] = L'\0';
+        
+        isort2(resultado, wcslen(resultado));
+        if (resultado[0] != L'\0' && jogadaValidaMatriz(jogadasAnterior, len, resultado))
+        {
+            return *resultado;
+        }
     }
-    free(substring);
-
-    if (bestPlay[0] == L'\0')
-    {
-        wprintf(L"PASSO\n");
-    }
-    else
-    {
-        imprimeMao(bestPlay, wcslen(bestPlay));
-    }
-}
-
-wchar_t jogadaCorreta(wchar_t jogadasAnterior[60][100])
-{
     return 0;
 }
+
 /*
 1
 🃞
@@ -332,7 +357,12 @@ int main()
     }
 
     // print da jogadaCorreta
-    wprintf(L"%100ls", jogadaCorreta(jogadasAnterior));
-
+    if (jogadaCorreta(jogadasAnterior, linhas, mao) == 0)
+    {
+        wprintf(L"PASSO\n");
+    }
+    else
+        wprintf(L"%100ls", jogadaCorreta(jogadasAnterior, linhas, mao));
+    
     return 0;
 }
